@@ -1,0 +1,44 @@
+# SLIM, MEF-ONLY handoff bundle.
+#
+# This is a self-contained Databricks Asset Bundle for the MEF Volume dashboard and
+# its medallion job — nothing else. make_handoff_zip.sh copies this file in as the
+# bundle's databricks.yml, alongside ONLY the mef_volume resources, notebook, dashboard
+# JSON, SQL, and docs. There is:
+#   - NO python wheel artifact (uv build --wheel can require network on an air-gapped box)
+#   - NO 23-table executive-agenda dashboard / demo-data job (those carry origin-workspace
+#     catalog literals and would deploy broken here)
+#   - NO origin-workspace host/catalog/schema/warehouse defaults
+#
+# One target, `handoff`, with no host (taken from the CLI profile) and catalog/schema/
+# warehouse_id supplied as required --vars. See ../HANDOFF.md.
+bundle:
+  name: mef_volume_handoff
+  uuid: 2b1d6f4a-8c3e-4a91-9d20-6f5b7e0c3a11
+
+include:
+  - resources/*.yml
+
+# catalog/schema/warehouse_id are REQUIRED at deploy — no defaults, so a missing value
+# fails fast rather than silently pointing at the wrong place.
+variables:
+  catalog:
+    description: The catalog the medallion job writes to, and that the dashboard queries.
+  schema:
+    description: The schema the medallion job writes to, and that the dashboard queries.
+  warehouse_id:
+    description: The SQL warehouse id the dashboard uses to run its queries.
+
+targets:
+  handoff:
+    default: true
+    mode: production
+    # No host: it comes from the CLI profile you authenticate with (-p <profile>).
+    workspace:
+      root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      warehouse_id: ${var.warehouse_id}
+    permissions:
+      - user_name: ${workspace.current_user.userName}
+        level: CAN_MANAGE

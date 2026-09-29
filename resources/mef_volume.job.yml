@@ -1,0 +1,42 @@
+# Builds the MEF Volume medallion (seed -> silver -> gold). Standalone resource:
+# it does NOT depend on any gold-layer PR marts.
+#
+# REQUIRED POST-DEPLOY RUN. `bundle deploy` only CREATES this job and the
+# dashboard resource; it does NOT run the SQL, so the mef_mvp_gold_* views the
+# dashboard reads do not exist until this job runs. After every deploy to a fresh
+# target you MUST run this job once (see docs/MEF-VOLUME-PATHWAY.md); the
+# dashboard is documented as non-rendering until it completes:
+#
+#     databricks bundle run build_mef_volume_medallion -t <target>
+#
+# The notebook runs the three SQL files STRICTLY in order seed -> silver -> gold
+# (ORDERED_FILES in the notebook), so relations always exist before the layer
+# that reads them. Catalog/schema flow in as job parameters bound to the bundle
+# target vars and are applied via USE CATALOG/USE SCHEMA in the notebook — ZERO
+# hardcoded workspace/catalog/schema/warehouse literals. Idempotent
+# (CREATE TABLE IF NOT EXISTS + TRUNCATE/INSERT + CREATE OR REPLACE VIEW): safe to
+# re-run against any target catalog/schema.
+
+resources:
+  jobs:
+    build_mef_volume_medallion:
+      # ${bundle.name} (= the bundle name, not a catalog/schema) keeps the sibling
+      # job's "<bundle>_<job>" naming without any literal.
+      name: ${bundle.name}_build_mef_volume_medallion
+
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
+
+      tasks:
+        # A single notebook task that runs seed -> silver -> gold IN ORDER
+        # internally. One task = the ordering cannot be reconfigured wrong; the
+        # gold layer can never run before the seed/silver relations it reads exist.
+        - task_key: build_medallion
+          notebook_task:
+            notebook_path: ../src/build_mef_volume_medallion_nb.ipynb
+            base_parameters:
+              catalog: "{{job.parameters.catalog}}"
+              schema: "{{job.parameters.schema}}"

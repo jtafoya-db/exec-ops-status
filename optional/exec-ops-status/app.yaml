@@ -1,0 +1,55 @@
+# Databricks App manifest for the Executive Operations Status app.
+#
+# This app ships a PREBUILT frontend (dist/) and a dependency-free Node server
+# (server.mjs uses only Node built-ins). The handoff bundle deliberately omits
+# package.json so the Apps runtime performs NO npm install — the app deploys with
+# zero network/registry access. See HANDOFF.md.
+#
+# THREE values the target workspace must supply:
+#   1. DATABRICKS_HOST         — auto-injected by the Databricks Apps runtime. Do NOT
+#                                set it here; server.mjs reads it from the environment.
+#   2. DATABRICKS_WORKSPACE_ID  — the numeric workspace id (the `o=` value), REQUIRED below.
+#   3. DASHBOARD_ID             — the published MEF Volume dashboard id, REQUIRED below.
+#
+# server.mjs fails loudly at startup if any required value is missing.
+#
+# VIEWER ATTRIBUTION (on-behalf-of-user, attribution only):
+#   The dashboard embed is still authorized and rendered by the app's service principal
+#   (client_credentials -> published/tokeninfo -> scoped token); queries still run as the
+#   publisher / SP, exactly as before. With user authorization enabled, the Apps proxy also
+#   forwards the signed-in viewer's token in `x-forwarded-access-token`; server.mjs uses it
+#   ONLY to call SCIM /Me and learn who is viewing. It then passes an opaque, non-PII
+#   external_viewer_id (the SCIM user id, or its HMAC if VIEWER_ID_HMAC_KEY is set) into
+#   the token exchange, and writes the real userName to the app log for audit. Viewers
+#   need no extra dashboard grant — access to the app is the gate. If no user token is
+#   forwarded, the app still renders with external_viewer_id "exec-ops-status-anon" and
+#   logs {"event":"embed-token-no-obo"}.
+#
+#   Minimal user authorization scopes (SCIM /Me needs only current-user read):
+#     user_api_scopes:
+#       - iam.current-user:read
+#       - iam.access-control:read   # auto-assigned default; required by user authorization
+#   `user_api_scopes` is an app setting, NOT an app.yaml key (app.yaml supports only
+#   `command` and `env`). Apply it on the app itself:
+#     databricks apps create-update exec-ops-status --json '{"update_mask":"user_api_scopes",
+#       "app":{"user_api_scopes":["iam.current-user:read","iam.access-control:read"]}}'
+#   or enable user authorization in the UI (Edit app -> User authorization) with no extra
+#   scopes; Databricks assigns exactly these two by default.
+command:
+  - node
+  - server.mjs
+env:
+  - name: NODE_ENV
+    value: production
+  # Numeric workspace id for this deployment (the `o=` query param). Find it in the
+  # workspace URL or via `databricks current-user me`/workspace settings.
+  - name: DATABRICKS_WORKSPACE_ID
+    value: REPLACE_WITH_WORKSPACE_ID
+  # Published MEF Volume dashboard id. After `bundle deploy` + publish, get it with:
+  #   databricks lakeview list --output json | jq -r '.[]|select(.display_name|startswith("MEF Volume"))|.dashboard_id'
+  - name: DASHBOARD_ID
+    value: REPLACE_WITH_DASHBOARD_ID
+  # OPTIONAL: key for hashing the SCIM user id into external_viewer_id. Unset = raw SCIM
+  # id (already an opaque system id). If used, source it from a secret resource, e.g.:
+  # - name: VIEWER_ID_HMAC_KEY
+  #   valueFrom: viewer-id-hmac-key

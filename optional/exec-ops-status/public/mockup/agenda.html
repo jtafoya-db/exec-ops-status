@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/uswds-design-system-fc84de71-1424-4bd8-b936-f021f2d10c14/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/uswds-design-system-fc84de71-1424-4bd8-b936-f021f2d10c14/tokens/colors.css">
+<link rel="stylesheet" href="_ds/uswds-design-system-fc84de71-1424-4bd8-b936-f021f2d10c14/tokens/typography.css">
+<link rel="stylesheet" href="_ds/uswds-design-system-fc84de71-1424-4bd8-b936-f021f2d10c14/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/uswds-design-system-fc84de71-1424-4bd8-b936-f021f2d10c14/styles.css">
+<script src="_ds/uswds-design-system-fc84de71-1424-4bd8-b936-f021f2d10c14/_ds_bundle.js"></script>
+<style>
+  body { margin: 0; background: #f0f0f0; }
+  a { color: #005ea2; }
+  a:hover { color: #1a4480; }
+</style>
+</helmet>
+
+<div style="min-height: 100vh; background: #f0f0f0; font-family: 'Public Sans', system-ui, sans-serif; color: #1b1b1b;">
+
+  <div style="background: #162e51; color: #fff;">
+    <div style="max-width: 1440px; margin: 0 auto; padding: 20px 40px 0; display: flex; flex-direction: column; gap: 18px;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <div style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #a9aeb1;">Daily IT operational standup meeting</div>
+          <div style="font-family: Merriweather, Georgia, serif; font-size: 24px; font-weight: 700; line-height: 1.2;">Executive Agenda</div>
+        </div>
+        <div style="text-align: right; line-height: 1.35; padding-bottom: 4px;">
+          <div style="font-size: 15px; font-weight: 700;">{{ todayLong }}</div>
+          <div style="font-size: 13px; color: #a9aeb1;">Processing day {{ procDay }} &middot; live, refreshed 6:02 a.m. ET</div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 4px;">
+        <button onClick="{{ goDashboard }}" style-focus="outline: var(--focus-outline); outline-offset: 3px;" style="{{ tabDashStyle }}">Filing season status</button>
+        <button onClick="{{ goEntry }}" style-focus="outline: var(--focus-outline); outline-offset: 3px;" style="{{ tabEntryStyle }}">Set today&rsquo;s status</button>
+      </div>
+    </div>
+  </div>
+
+  <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+  <div style="{{ dashLayoutStyle }}">
+    <div style="position: sticky; top: 24px; background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 12px 0 10px;">
+      <div style="{{ railHeadStyle }}">
+        <sc-if value="{{ railOpen }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #565c65;">Running order</div>
+            <div style="font-size: 13px; color: #71767a;">12 sections</div>
+          </div>
+        </sc-if>
+        <button onClick="{{ toggleRail }}" title="{{ railToggleTitle }}" style-focus="outline: var(--focus-outline); outline-offset: 2px;" style="background: transparent; border: 1px solid #dfe1e2; border-radius: 4px; width: 28px; height: 28px; font-family: inherit; font-size: 14px; font-weight: 700; color: #005ea2; cursor: pointer; flex-shrink: 0;">{{ railToggleIcon }}</button>
+      </div>
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="12">
+        <a href="{{ item.href }}" title="{{ item.label }}" style="{{ item.style }}">
+          <span style="{{ item.dotStyle }}"></span>
+          <sc-if value="{{ railOpen }}" hint-placeholder-val="{{ true }}">
+            <span style="flex: 1;">{{ item.label }}</span>
+          </sc-if>
+        </a>
+      </sc-for>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 28px; min-width: 0;">
+
+      <div id="sec-1" style="scroll-margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(430px, 1fr)); gap: 24px;">
+        <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 28px 28px 24px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+            <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #565c65;">I. Directors overall status</div>
+            <div style="font-size: 13px; color: #71767a;">Day 92 of filing season</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 20px;">
+            <div style="{{ overallSwatchLarge }}"></div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="font-family: Merriweather, Georgia, serif; font-size: 40px; font-weight: 700; line-height: 1;">{{ overallLabel }}</div>
+              <div style="font-size: 16px; color: #3d4551; max-width: 34ch;">{{ overallDefinition }}</div>
+            </div>
+          </div>
+          <div style="border-top: 1px solid #dfe1e2; padding-top: 16px; display: grid; grid-template-columns: auto 1fr; gap: 10px 20px; font-size: 15px;">
+            <div style="color: #71767a;">Rule suggested</div>
+            <div style="font-weight: 700;">Yellow &mdash; 2 open P2 tickets at generation</div>
+            <div style="color: #71767a;">Decided by</div>
+            <div>Director pre&#8209;brief, 6:15 a.m. &mdash; unanimous</div>
+            <div style="color: #71767a;">Entered by</div>
+            <div>Director, IT Operations</div>
+          </div>
+          <div style="background: #f0f0f0; border-left: 4px solid #005ea2; padding: 14px 16px; font-size: 15px; line-height: 1.5;">
+            <span style="font-weight: 700;">Reason on record:</span> Neither open ticket affects filing deadline processing, but the room agreed an open ticket should be reported. Carried from {{ procMD }}.
+          </div>
+        </div>
+
+        <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 28px; display: flex; flex-direction: column; gap: 20px;">
+          <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #565c65;">Filing season readiness</div>
+          <div style="display: flex; align-items: baseline; gap: 10px;">
+            <div style="font-family: Merriweather, Georgia, serif; font-size: 44px; font-weight: 700; line-height: 1;">131</div>
+            <div style="font-size: 16px; color: #3d4551;">of 138 applications IT&#8209;certified</div>
+          </div>
+          <div style="display: flex; height: 16px; border-radius: 2px; overflow: hidden; border: 1px solid #dfe1e2;">
+            <div style="width: 94.9%; background: #00a91c;"></div>
+            <div style="width: 3.6%; background: #ffbe2e;"></div>
+            <div style="width: 1.5%; background: #d54309;"></div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+            <div><div style="font-size: 24px; font-weight: 700;">131</div><div style="font-size: 14px; color: #565c65;">Certified</div></div>
+            <div><div style="font-size: 24px; font-weight: 700;">5</div><div style="font-size: 14px; color: #565c65;">In validation</div></div>
+            <div><div style="font-size: 24px; font-weight: 700;">2</div><div style="font-size: 14px; color: #565c65;">At risk</div></div>
+          </div>
+          <div style="border-top: 1px solid #dfe1e2; padding-top: 16px; display: flex; flex-direction: column; gap: 10px; font-size: 15px;">
+            <div style="display: flex; justify-content: space-between;"><span style="color: #565c65;">Returns accepted, season to date</span><span style="font-weight: 700;">97.6M <span style="color: #2d6b34; font-weight: 400;">+2.9% YoY</span></span></div>
+            <div style="display: flex; justify-content: space-between;"><span style="color: #565c65;">Refunds disbursed yesterday</span><span style="font-weight: 700;">$3.45B</span></div>
+            <div style="display: flex; justify-content: space-between;"><span style="color: #565c65;">Level of service</span><span style="font-weight: 700;">76.5% <span style="color: #b50909; font-weight: 400;">&minus;1.8% vs. prior season</span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="sec-2" style="scroll-margin-top: 20px; background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 24px 28px 26px; display: flex; flex-direction: column; gap: 18px;">
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;">
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-family: Merriweather, Georgia, serif; font-size: 22px; font-weight: 700;">II. Processing status</div>
+            <div style="font-size: 15px; color: #565c65;">One published color per process area, decided this morning.</div>
+          </div>
+          <div style="font-size: 14px; color: #565c65;">{{ overallNote }}</div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px;">
+          <sc-for list="{{ areaCards }}" as="area" hint-placeholder-count="7">
+            <div style="border: 1px solid #dfe1e2; border-radius: 4px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="{{ area.dot }}"></span>
+                <span style="font-size: 15px; font-weight: 700;">{{ area.status }}</span>
+              </div>
+              <div style="font-size: 15px;">{{ area.name }}</div>
+              <div style="font-size: 13px; color: #71767a;">{{ area.detail }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div id="sec-2a" style="scroll-margin-top: 20px; background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; overflow: hidden;">
+        <div style="padding: 24px 28px 20px; border-bottom: 1px solid #dfe1e2; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;">
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-family: Merriweather, Georgia, serif; font-size: 22px; font-weight: 700;">II.a. Morning processing status</div>
+            <div style="font-size: 15px; color: #565c65;">Overnight cycle, real&#8209;time systems, batch completion, and refunds.</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="width: 20px; height: 20px; border-radius: 4px; background: #00a91c; border: 2px solid #008817;"></span>
+            <div style="font-family: Merriweather, Georgia, serif; font-size: 22px; font-weight: 700;">Current condition: Green</div>
+          </div>
+        </div>
+
+        <div style="padding: 20px 28px; border-bottom: 1px solid #dfe1e2; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px;">
+          <div><div style="font-size: 13px; color: #565c65;">Processing day</div><div style="font-size: 15px; font-family: 'Roboto Mono', monospace; font-weight: 700;">Cycle {{ cycleCode }} Day 3</div><div style="font-size: 13px; color: #71767a; font-family: 'Roboto Mono', monospace;">run R-0001</div></div>
+          <div><div style="font-size: 13px; color: #565c65;">Ended</div><div style="font-size: 15px; font-weight: 700;">{{ procWeekday }} {{ procDay }}</div><div style="font-size: 13px; color: #71767a; font-family: 'Roboto Mono', monospace;">21:26:54 ET</div></div>
+          <div><div style="font-size: 13px; color: #565c65;">Batch processing</div><div style="font-size: 15px; font-family: 'Roboto Mono', monospace; font-weight: 700;">Cycle {{ cycleCode }} Daily Day 04</div><div style="font-size: 13px; color: #71767a;">has completed</div></div>
+          <div><div style="font-size: 13px; color: #565c65;">Next</div><div style="font-size: 15px; font-weight: 700;">Weekly Day 05</div><div style="font-size: 13px; color: #71767a;">begins after data swap</div></div>
+          <div><div style="font-size: 13px; color: #565c65;">Downstream jobs</div><div style="font-size: 15px; font-weight: 700;">On schedule</div></div>
+        </div>
+
+        <div style="padding: 20px 28px; border-bottom: 1px solid #dfe1e2; display: flex; flex-direction: column; gap: 12px;">
+          <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Real&#8209;time system status</div>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <sc-for list="{{ realtime }}" as="sys" hint-placeholder-count="5">
+              <div style="{{ sys.style }}">
+                <span style="{{ sys.dot }}"></span>
+                <span style="font-size: 16px; font-weight: 700;">{{ sys.name }}</span>
+                <span style="font-size: 14px;">{{ sys.state }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="padding: 20px 28px; border-bottom: 1px solid #dfe1e2; display: flex; flex-direction: column; gap: 12px;">
+          <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Overnight batch completion</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div style="border: 1px solid #dfe1e2; border-radius: 4px; padding: 16px 18px;">
+              <div style="font-size: 15px; font-weight: 700; margin-bottom: 10px;">Returns intake and review</div>
+              <div style="display: flex; gap: 24px;">
+                <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 15px;">Intake</span><span style="font-size: 14px; color: #2d6b34; font-weight: 700;">Completed 03:12</span></div>
+                <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 15px;">Review</span><span style="font-size: 14px; color: #2d6b34; font-weight: 700;">Completed 04:41</span></div>
+              </div>
+              <div style="margin-top: 10px; font-size: 13px; color: #71767a;">Returns review is the Databricks&#8209;resident workload &mdash; <a href="#sec-5">Section V reads from it</a>.</div>
+            </div>
+            <div style="border: 1px solid #dfe1e2; border-radius: 4px; padding: 16px 18px;">
+              <div style="font-size: 15px; font-weight: 700; margin-bottom: 10px;">Scanning and data capture</div>
+              <div style="display: flex; gap: 24px;">
+                <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 15px;">Scanning</span><span style="font-size: 14px; color: #2d6b34; font-weight: 700;">COMPLETED 02:38</span></div>
+                <div style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 15px;">Data capture</span><span style="font-size: 14px; color: #2d6b34; font-weight: 700;">COMPLETED 05:04</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding: 22px 28px 26px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Refund data</div>
+          <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px; align-items: start;">
+            <div>
+              <div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+                <thead>
+                  <tr style="text-align: left;">
+                    <th style="padding: 8px 0; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Type</th>
+                    <th style="padding: 8px 0; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Count</th>
+                    <th style="padding: 8px 0; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Disbursements</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td style="padding: 12px 0; border-bottom: 1px solid #dfe1e2;">EFT</td><td style="padding: 12px 0; text-align: right; font-family: 'Roboto Mono', monospace; border-bottom: 1px solid #dfe1e2;">1,611,240</td><td style="padding: 12px 0; text-align: right; font-family: 'Roboto Mono', monospace; border-bottom: 1px solid #dfe1e2;">$3,402,118,540.16</td></tr>
+                  <tr><td style="padding: 12px 0; border-bottom: 1px solid #dfe1e2;">Paper</td><td style="padding: 12px 0; text-align: right; font-family: 'Roboto Mono', monospace; border-bottom: 1px solid #dfe1e2;">33,870</td><td style="padding: 12px 0; text-align: right; font-family: 'Roboto Mono', monospace; border-bottom: 1px solid #dfe1e2;">$50,221,873.40</td></tr>
+                  <tr><td style="padding: 14px 0; font-weight: 700;">Total</td><td style="padding: 14px 0; text-align: right; font-family: 'Roboto Mono', monospace; font-weight: 700; font-size: 17px;">1,645,110</td><td style="padding: 14px 0; text-align: right; font-family: Merriweather, Georgia, serif; font-weight: 700; font-size: 22px;">$3,452,340,413.56</td></tr>
+                </tbody>
+              </table></div>
+              <div style="margin-top: 14px; font-size: 15px; line-height: 1.5; color: #3d4551;">Summary: refunds disbursed for processing day {{ procDay }} totaled $3,452,340,413.56 across 1,645,110 refunds, 97.9% by electronic funds transfer.</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Total disbursements, last 30 days</div>
+                <div style="font-size: 14px; color: #565c65;">Peak $5.98B on {{ peakMD }}</div>
+              </div>
+              <div style="display: flex; align-items: flex-end; gap: 2px; height: 110px; border-bottom: 1px solid #dfe1e2;">
+                <sc-for list="{{ refundTrend }}" as="bar" hint-placeholder-count="30">
+                  <div style="{{ bar.style }}"></div>
+                </sc-for>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 13px; color: #71767a;"><span>{{ axisStartMD }}</span><span>{{ axisMidMD }}</span><span>{{ procMD }}</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="sec-3" style="scroll-margin-top: 20px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; overflow: hidden;">
+          <div style="padding: 24px 28px 18px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; border-bottom: 1px solid #dfe1e2;">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="font-family: Merriweather, Georgia, serif; font-size: 24px; font-weight: 700;">III.a. Incident management &mdash; open P1 and P2</div>
+              <div style="font-size: 15px; color: #565c65;">Open at report generation, 6:30 a.m. P1 drives Red; P2 drives Yellow.</div>
+              <div style="font-size: 14px; color: #71767a;">Live from the ITSM feed &middot; last query 6:02 a.m.</div>
+            </div>
+            <div style="display: flex; gap: 28px;">
+              <div style="display: flex; flex-direction: column; align-items: flex-end;"><div style="font-family: Merriweather, Georgia, serif; font-size: 34px; font-weight: 700; color: #b50909;">0</div><div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Open P1</div></div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end;"><div style="font-family: Merriweather, Georgia, serif; font-size: 34px; font-weight: 700; color: #8a7000;">2</div><div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Open P2</div></div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end;"><div style="font-family: Merriweather, Georgia, serif; font-size: 34px; font-weight: 700;">6</div><div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Closed in 24h</div></div>
+            </div>
+          </div>
+          <div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+            <thead>
+              <tr style="background: #f0f0f0; text-align: left;">
+                <th style="padding: 12px 28px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Priority</th>
+                <th style="padding: 12px 16px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Ticket</th>
+                <th style="padding: 12px 16px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">System</th>
+                <th style="padding: 12px 16px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Filing season impact</th>
+                <th style="padding: 12px 16px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Age</th>
+                <th style="padding: 12px 28px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Owner</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ incidents }}" as="inc" hint-placeholder-count="4">
+                <tr style="{{ inc.rowStyle }}">
+                  <td style="padding: 16px 28px;"><x-import component-from-global-scope="USWDSDesignSystem_fc84de.Tag" color="{{ inc.tag }}" size="big" hint-size="40px,20px">{{ inc.priority }}</x-import></td>
+                  <td style="padding: 16px; font-family: 'Roboto Mono', monospace;"><a href="#sec-3">{{ inc.ticket }}</a></td>
+                  <td style="padding: 16px; font-weight: 700;">{{ inc.system }}</td>
+                  <td style="padding: 16px; color: #3d4551;">{{ inc.impact }}</td>
+                  <td style="padding: 16px;">{{ inc.age }}</td>
+                  <td style="padding: 16px 28px; color: #3d4551;">{{ inc.owner }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table></div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(430px, 1fr)); gap: 20px; align-items: start;">
+          <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 22px 26px 24px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+              <div style="font-family: Merriweather, Georgia, serif; font-size: 20px; font-weight: 700;">III.c. Opened since report generation</div>
+              <div style="font-size: 14px; color: #565c65;">Since 6:30 a.m.</div>
+            </div>
+            <div style="font-size: 15px; color: #565c65;">What changed while the agenda was being read. Not part of this morning&rsquo;s status rule.</div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 14px; border: 1px solid #dfe1e2; border-left: 4px solid #ffbe2e; border-radius: 4px; padding: 14px 16px;">
+                <x-import component-from-global-scope="USWDSDesignSystem_fc84de.Tag" color="accent-warm" size="big" hint-size="34px,20px">P2</x-import>
+                <span style="font-family: 'Roboto Mono', monospace; font-size: 15px;">INC-0005</span>
+                <span style="font-weight: 700; font-size: 15px;">Online portal</span>
+                <span style="flex: 1; font-size: 15px; color: #3d4551;">Opened 09:18 &mdash; under triage</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 14px; border: 1px solid #dfe1e2; border-left: 4px solid #ffbe2e; border-radius: 4px; padding: 14px 16px;">
+                <x-import component-from-global-scope="USWDSDesignSystem_fc84de.Tag" color="accent-warm" size="big" hint-size="34px,20px">P2</x-import>
+                <span style="font-family: 'Roboto Mono', monospace; font-size: 15px;">INC-0006</span>
+                <span style="font-weight: 700; font-size: 15px;">Notifications</span>
+                <span style="flex: 1; font-size: 15px; color: #3d4551;">Opened 13:18 &mdash; assigned</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 22px 26px 24px; display: flex; flex-direction: column; gap: 16px;">
+            <div style="font-family: Merriweather, Georgia, serif; font-size: 20px; font-weight: 700;">III.b, III.d, III.e</div>
+            <div style="display: flex; flex-direction: column; gap: 14px; font-size: 15px;">
+              <div style="display: flex; flex-direction: column; gap: 2px;"><a href="#sec-3">III.b. P1/P2 incident dashboard</a><span style="font-size: 14px; color: #71767a;">Opens in the ticketing portal</span></div>
+              <div style="display: flex; flex-direction: column; gap: 2px; border-top: 1px solid #dfe1e2; padding-top: 12px;"><span style="font-weight: 700;">III.d. Critical applications PM in progress</span><span style="font-size: 14px; color: #71767a;">[Update anticipated weekly on Thursday]</span></div>
+              <div style="display: flex; flex-direction: column; gap: 2px; border-top: 1px solid #dfe1e2; padding-top: 12px;"><span style="font-weight: 700;">III.e. Planned changes to production</span><a href="#sec-3">Executive change management dashboard</a><span style="font-size: 14px; color: #71767a;">[Update anticipated weekly on Wednesdays]</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="sec-4" style="scroll-margin-top: 20px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; overflow: hidden;">
+          <div style="padding: 24px 28px 18px; border-bottom: 1px solid #dfe1e2; display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-family: Merriweather, Georgia, serif; font-size: 24px; font-weight: 700;">IV. Communication status</div>
+            <div style="font-size: 15px; color: #565c65;">Component status by site, then enterprise&#8209;wide.</div>
+          </div>
+          <div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+            <thead>
+              <tr style="background: #f0f0f0; text-align: left;">
+                <th style="padding: 12px 28px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Component</th>
+                <th style="padding: 12px 16px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Data Center A</th>
+                <th style="padding: 12px 16px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Data Center B</th>
+                <th style="padding: 12px 16px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Data Center C</th>
+                <th style="padding: 12px 28px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Comments</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ siteGrid }}" as="row" hint-placeholder-count="2">
+                <tr style="border-bottom: 1px solid #dfe1e2;">
+                  <td style="padding: 16px 28px; font-weight: 700;">{{ row.name }}</td>
+                  <td style="padding: 16px;"><div style="{{ row.dcaStyle }}"><span style="{{ row.dcaDot }}"></span>{{ row.dca }}</div></td>
+                  <td style="padding: 16px;"><div style="{{ row.dcbStyle }}"><span style="{{ row.dcbDot }}"></span>{{ row.dcb }}</div></td>
+                  <td style="padding: 16px;"><div style="{{ row.dccStyle }}"><span style="{{ row.dccDot }}"></span>{{ row.dcc }}</div></td>
+                  <td style="padding: 16px 28px; color: #3d4551;">{{ row.comment }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table></div>
+          <div style="padding: 22px 28px 26px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Enterprise components</div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 28px;">
+              <sc-for list="{{ enterpriseRows }}" as="row" hint-placeholder-count="7">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid #dfe1e2; padding: 10px 0;">
+                  <span style="font-size: 15px;">{{ row.name }}</span>
+                  <div style="{{ row.style }}"><span style="{{ row.dot }}"></span>{{ row.status }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; overflow: hidden;">
+          <div style="padding: 22px 28px 16px; border-bottom: 1px solid #dfe1e2; display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-family: Merriweather, Georgia, serif; font-size: 22px; font-weight: 700;">IV. Contact center metrics</div>
+            <div style="font-size: 15px; color: #565c65;">Daily, last week (Sun&ndash;Sat), year to date, and prior year to date.</div>
+          </div>
+
+          <div style="padding: 22px 28px 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 28px;">
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+                <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Level of service, last 30 days</div>
+                <div style="font-size: 14px; color: #565c65;">Target 80%</div>
+              </div>
+              <div style="position: relative; height: 130px; border-bottom: 1px solid #dfe1e2;">
+                <div style="position: absolute; left: 0; right: 0; top: 39px; border-top: 2px dashed #71767a;"></div>
+                <div style="display: flex; align-items: flex-end; gap: 2px; height: 130px;">
+                  <sc-for list="{{ losTrend }}" as="bar" hint-placeholder-count="30">
+                    <div style="{{ bar.style }}"></div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 13px; color: #71767a;"><span>{{ axisStartMD }}</span><span>{{ axisMidMD }}</span><span>{{ procMD }}</span></div>
+              <div style="display: flex; gap: 20px; font-size: 14px; color: #3d4551;">
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 12px; height: 12px; background: #005ea2; border-radius: 2px;"></span>At or above target</div>
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 12px; height: 12px; background: #ffbe2e; border-radius: 2px;"></span>Below target</div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Where yesterday&rsquo;s 2.93M contacts went</div>
+              <div style="display: flex; height: 26px; border-radius: 3px; overflow: hidden;">
+                <sc-for list="{{ channelMix }}" as="seg" hint-placeholder-count="4">
+                  <div style="{{ seg.style }}"></div>
+                </sc-for>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <sc-for list="{{ channelMix }}" as="seg" hint-placeholder-count="4">
+                  <div style="display: flex; align-items: center; gap: 10px; font-size: 15px;">
+                    <span style="{{ seg.swatch }}"></span>
+                    <span style="flex: 1;">{{ seg.name }}</span>
+                    <span style="font-family: 'Roboto Mono', monospace;">{{ seg.value }}</span>
+                    <span style="width: 56px; text-align: right; color: #565c65;">{{ seg.share }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; border-top: 1px solid #dfe1e2; padding-top: 14px;">
+                <div><div style="font-size: 13px; color: #565c65;">Level of service</div><div style="font-size: 22px; font-weight: 700; font-family: 'Roboto Mono', monospace;">76.5%</div><div style="font-size: 13px; color: #b50909; font-weight: 700;">&minus;1.8% vs. prior season</div></div>
+                <div><div style="font-size: 13px; color: #565c65;">Speed of answer</div><div style="font-size: 22px; font-weight: 700; font-family: 'Roboto Mono', monospace;">9:55</div><div style="font-size: 13px; color: #b50909; font-weight: 700;">+1:08 vs. prior season</div></div>
+                <div><div style="font-size: 13px; color: #565c65;">Max IVR ports</div><div style="font-size: 22px; font-weight: 700; font-family: 'Roboto Mono', monospace;">11,800</div><div style="font-size: 13px; color: #565c65;">YTD peak 15,200</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding: 0 28px 18px;">
+            <button onClick="{{ toggleMetrics }}" style-focus="outline: var(--focus-outline); outline-offset: 3px;" style="{{ discStyle }}">{{ metricsToggleLabel }}</button>
+          </div>
+          <sc-if value="{{ openMetrics }}">
+          <div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+            <thead>
+              <tr style="background: #f0f0f0; text-align: left;">
+                <th style="padding: 12px 28px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Metric</th>
+                <th style="padding: 12px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Daily</th>
+                <th style="padding: 12px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Last week</th>
+                <th style="padding: 12px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">YTD</th>
+                <th style="padding: 12px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Prior YTD</th>
+                <th style="padding: 12px 28px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">YTD % diff</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ ccMetrics }}" as="row" hint-placeholder-count="6">
+                <tr style="border-bottom: 1px solid #dfe1e2;">
+                  <td style="padding: 13px 28px; font-weight: 700;">{{ row.metric }}</td>
+                  <td style="padding: 13px 12px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.daily }}</td>
+                  <td style="padding: 13px 12px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.week }}</td>
+                  <td style="padding: 13px 12px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.ytd }}</td>
+                  <td style="padding: 13px 12px; text-align: right; font-family: 'Roboto Mono', monospace; color: #565c65;">{{ row.prior }}</td>
+                  <td style="padding: 13px 28px; text-align: right; font-weight: 700;"><span style="{{ row.diffStyle }}">{{ row.diff }}</span></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table></div>
+          </sc-if>
+          <div style="padding: 8px 28px 22px; display: flex; flex-direction: column; gap: 14px; border-top: 1px solid #dfe1e2;">
+            <div style="padding-top: 18px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+              <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Voice channel &mdash; IVR, top applications</div>
+              <div style="font-size: 14px; color: #565c65;">Yesterday &middot; 11 applications, 2.45M contacts</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <sc-for list="{{ voiceBars }}" as="row" hint-placeholder-count="6">
+                <div style="display: grid; grid-template-columns: minmax(80px, 0.7fr) minmax(60px, 1fr) auto auto; align-items: center; gap: 10px;">
+                  <div style="font-size: 15px;">{{ row.app }}</div>
+                  <div style="height: 16px; background: #eef1f3; border-radius: 2px;"><div style="{{ row.barStyle }}"></div></div>
+                  <div style="font-size: 14px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.value }}</div>
+                  <div style="font-size: 14px; text-align: right; font-weight: 700; min-width: 56px;"><span style="{{ row.deltaStyle }}">{{ row.delta }}</span></div>
+                </div>
+              </sc-for>
+            </div>
+            <div>
+              <button onClick="{{ toggleVoice }}" style-focus="outline: var(--focus-outline); outline-offset: 3px;" style="{{ discStyle }}">{{ voiceToggleLabel }}</button>
+            </div>
+          </div>
+          <sc-if value="{{ openVoice }}">
+          <div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+            <thead>
+              <tr style="text-align: left;">
+                <th style="padding: 10px 28px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Application</th>
+                <th style="padding: 10px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Daily</th>
+                <th style="padding: 10px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Last week</th>
+                <th style="padding: 10px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">YTD</th>
+                <th style="padding: 10px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Prior YTD</th>
+                <th style="padding: 10px 28px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">YTD % diff</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ voiceRows }}" as="row" hint-placeholder-count="12">
+                <tr style="{{ row.rowStyle }}">
+                  <td style="padding: 11px 28px;">{{ row.app }}</td>
+                  <td style="padding: 11px 12px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.daily }}</td>
+                  <td style="padding: 11px 12px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.week }}</td>
+                  <td style="padding: 11px 12px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.ytd }}</td>
+                  <td style="padding: 11px 12px; text-align: right; font-family: 'Roboto Mono', monospace; color: #565c65;">{{ row.prior }}</td>
+                  <td style="padding: 11px 28px; text-align: right;"><span style="{{ row.diffStyle }}">{{ row.diff }}</span></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table></div>
+          </sc-if>
+          <div style="padding: 20px 28px 26px; border-top: 1px solid #dfe1e2;">
+            <button onClick="{{ toggleEntitle }}" style-focus="outline: var(--focus-outline); outline-offset: 3px;" style="{{ entitleToggleStyle }}">{{ entitleToggleLabel }}</button>
+            <sc-if value="{{ showEntitle }}">
+              <div style="margin-top: 16px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;">
+                <div><div style="font-size: 13px; color: #565c65;">Inventory today</div><div style="font-size: 20px; font-weight: 700; font-family: 'Roboto Mono', monospace;">45,310</div></div>
+                <div><div style="font-size: 13px; color: #565c65;">Yesterday</div><div style="font-size: 20px; font-weight: 700; font-family: 'Roboto Mono', monospace;">45,262</div></div>
+                <div><div style="font-size: 13px; color: #565c65;">Change</div><div style="font-size: 20px; font-weight: 700; font-family: 'Roboto Mono', monospace;">+48</div></div>
+                <div><div style="font-size: 13px; color: #565c65;">Processed</div><div style="font-size: 20px; font-weight: 700; font-family: 'Roboto Mono', monospace;">377</div></div>
+                <div><div style="font-size: 13px; color: #565c65;">Received</div><div style="font-size: 20px; font-weight: 700; font-family: 'Roboto Mono', monospace;">425</div></div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+
+      <div id="sec-5" style="scroll-margin-top: 20px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; overflow: hidden;">
+          <div style="padding: 24px 28px 18px; border-bottom: 1px solid #dfe1e2; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;">
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <div style="font-family: Merriweather, Georgia, serif; font-size: 24px; font-weight: 700;">V.a. Control launch &mdash; intake receipts</div>
+              <div style="font-size: 15px; color: #565c65;">Processing day {{ procDay }}, by processing center.</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 26px; font-weight: 700; font-family: 'Roboto Mono', monospace;">4,451,500</div>
+              <div style="font-size: 14px; color: #565c65;">documents &middot; 2.4% to error</div>
+            </div>
+          </div>
+
+          <div style="padding: 22px 28px 20px; display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+              <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Documents processed yesterday, by center</div>
+              <div style="font-size: 14px; color: #565c65;">Bar shows volume &middot; red band is the share to error, scaled for visibility</div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <sc-for list="{{ intakeBars }}" as="row" hint-placeholder-count="5">
+                <div style="display: grid; grid-template-columns: minmax(88px, 0.7fr) minmax(60px, 1fr) auto auto; align-items: center; gap: 12px;">
+                  <div style="font-size: 15px;">{{ row.spc }}</div>
+                  <div style="height: 20px; background: #eef1f3; border-radius: 2px; overflow: hidden;">
+                    <div style="{{ row.barStyle }}">
+                      <div style="{{ row.errStyle }}"></div>
+                    </div>
+                  </div>
+                  <div style="font-size: 14px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.total }}</div>
+                  <div style="font-size: 14px; text-align: right; min-width: 52px;"><span style="{{ row.pctStyle }}">{{ row.pct }}</span></div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display: flex; gap: 20px; font-size: 14px; color: #3d4551;">
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 12px; height: 12px; background: #005ea2; border-radius: 2px;"></span>To good</div>
+              <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 12px; height: 12px; background: #d54309; border-radius: 2px;"></span>To error</div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; border-top: 1px solid #dfe1e2; padding-top: 16px;">
+              <div><div style="font-size: 13px; color: #565c65;">Documents yesterday</div><div style="font-size: 22px; font-weight: 700; font-family: 'Roboto Mono', monospace;">4,451,500</div></div>
+              <div><div style="font-size: 13px; color: #565c65;">Season to date</div><div style="font-size: 22px; font-weight: 700; font-family: 'Roboto Mono', monospace;">111,271,120</div></div>
+              <div><div style="font-size: 13px; color: #565c65;">Error rate yesterday</div><div style="font-size: 22px; font-weight: 700; font-family: 'Roboto Mono', monospace;">2.4%</div></div>
+              <div><div style="font-size: 13px; color: #565c65;">Error rate, season</div><div style="font-size: 22px; font-weight: 700; font-family: 'Roboto Mono', monospace;">2.5%</div></div>
+            </div>
+            <div style="display: flex; gap: 18px; flex-wrap: wrap;">
+              <button onClick="{{ toggleIntakeDaily }}" style-focus="outline: var(--focus-outline); outline-offset: 3px;" style="{{ discStyle }}">{{ intakeDailyToggleLabel }}</button>
+              <button onClick="{{ toggleIntakeCum }}" style-focus="outline: var(--focus-outline); outline-offset: 3px;" style="{{ discStyle }}">{{ intakeCumToggleLabel }}</button>
+            </div>
+          </div>
+
+          <sc-if value="{{ openIntakeDaily }}">
+          <div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+            <thead>
+              <tr style="background: #f0f0f0; text-align: left;">
+                <th style="padding: 12px 28px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Center</th>
+                <th style="padding: 12px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Total documents</th>
+                <th style="padding: 12px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">To good</th>
+                <th style="padding: 12px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">To error</th>
+                <th style="padding: 12px 28px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Error %</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ intakeDaily }}" as="row" hint-placeholder-count="6">
+                <tr style="{{ row.rowStyle }}">
+                  <td style="padding: 13px 28px; font-weight: 700;">{{ row.spc }}</td>
+                  <td style="padding: 13px 12px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.total }}</td>
+                  <td style="padding: 13px 12px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.good }}</td>
+                  <td style="padding: 13px 12px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.error }}</td>
+                  <td style="padding: 13px 28px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.pct }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table></div>
+          </sc-if>
+          <sc-if value="{{ openIntakeCum }}">
+          <div style="padding: 20px 28px 8px; font-size: 15px; color: #3d4551;">Volume of receipts processed in the intake run, {{ seasonStartShort }} to current, is <span style="font-weight: 700; font-family: 'Roboto Mono', monospace;">111,271,120</span> documents at a 2.5% error rate.</div>
+          <div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+            <thead>
+              <tr style="text-align: left;">
+                <th style="padding: 10px 28px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Center &mdash; season to date</th>
+                <th style="padding: 10px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Total documents</th>
+                <th style="padding: 10px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">To good</th>
+                <th style="padding: 10px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">To error</th>
+                <th style="padding: 10px 28px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Error %</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ intakeCumulative }}" as="row" hint-placeholder-count="6">
+                <tr style="{{ row.rowStyle }}">
+                  <td style="padding: 11px 28px;">{{ row.spc }}</td>
+                  <td style="padding: 11px 12px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.total }}</td>
+                  <td style="padding: 11px 12px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.good }}</td>
+                  <td style="padding: 11px 12px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.error }}</td>
+                  <td style="padding: 11px 28px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.pct }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table></div>
+          </sc-if>
+          <div style="padding: 22px 28px 26px; border-top: 1px solid #dfe1e2; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+              <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Daily error percentage, last 5 processing days</div>
+              <div style="font-size: 14px; color: #565c65;">Darker is a higher error rate</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 140px repeat(5, 1fr); gap: 6px; align-items: center;">
+              <div></div>
+              <div style="font-size: 13px; color: #565c65; text-align: center;">{{ procMD4 }}</div>
+              <div style="font-size: 13px; color: #565c65; text-align: center;">{{ procMD3 }}</div>
+              <div style="font-size: 13px; color: #565c65; text-align: center;">{{ procMD2 }}</div>
+              <div style="font-size: 13px; color: #565c65; text-align: center;">{{ procMD1 }}</div>
+              <div style="font-size: 13px; color: #565c65; text-align: center;">{{ procMD0 }}</div>
+              <sc-for list="{{ errorGrid }}" as="row" hint-placeholder-count="5">
+                <div style="font-size: 15px;">{{ row.spc }}</div>
+                <div style="{{ row.c0 }}">{{ row.v0 }}</div>
+                <div style="{{ row.c1 }}">{{ row.v1 }}</div>
+                <div style="{{ row.c2 }}">{{ row.v2 }}</div>
+                <div style="{{ row.c3 }}">{{ row.v3 }}</div>
+                <div style="{{ row.c4 }}">{{ row.v4 }}</div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(430px, 1fr)); gap: 20px; align-items: start;">
+          <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; overflow: hidden;">
+            <div style="padding: 22px 28px 16px; border-bottom: 1px solid #dfe1e2; display: flex; flex-direction: column; gap: 4px;">
+              <div style="font-family: Merriweather, Georgia, serif; font-size: 22px; font-weight: 700;">V.b. Executive Operations Status</div>
+              <div style="font-size: 15px; color: #565c65;">Turnover by return type, daily and year to date.</div>
+            </div>
+
+            <div style="padding: 22px 28px 22px; display: flex; flex-direction: column; gap: 18px;">
+              <sc-for list="{{ opsBars }}" as="row" hint-placeholder-count="2">
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+                    <div style="font-size: 16px; font-weight: 700;">{{ row.name }}</div>
+                    <div style="font-size: 14px; color: #565c65;">{{ row.submitted }} submitted</div>
+                  </div>
+                  <div style="display: flex; height: 24px; border-radius: 3px; overflow: hidden;">
+                    <div style="{{ row.acceptedStyle }}"></div>
+                    <div style="{{ row.rejectedStyle }}"></div>
+                  </div>
+                  <div style="display: flex; gap: 20px; font-size: 14px; flex-wrap: wrap;">
+                    <span style="color: #3d4551;">Accepted <span style="font-family: 'Roboto Mono', monospace; font-weight: 700;">{{ row.accepted }}</span></span>
+                    <span style="color: #3d4551;">Rejected <span style="font-family: 'Roboto Mono', monospace; font-weight: 700;">{{ row.rejected }}</span></span>
+                    <span style="color: #3d4551;">Reject rate <span style="font-family: 'Roboto Mono', monospace; font-weight: 700;">{{ row.rate }}</span> today &middot; <span style="font-family: 'Roboto Mono', monospace;">{{ row.ytdRate }}</span> YTD</span>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; border-top: 1px solid #dfe1e2; padding-top: 16px;">
+                <div><div style="font-size: 13px; color: #565c65;">Total submitted</div><div style="font-size: 22px; font-weight: 700; font-family: 'Roboto Mono', monospace;">11,011,052</div></div>
+                <div><div style="font-size: 13px; color: #565c65;">Federal</div><div style="font-size: 22px; font-weight: 700; font-family: 'Roboto Mono', monospace;">7,023,430</div></div>
+                <div><div style="font-size: 13px; color: #565c65;">States</div><div style="font-size: 22px; font-weight: 700; font-family: 'Roboto Mono', monospace;">3,987,622</div></div>
+              </div>
+              <div>
+                <button onClick="{{ toggleOps }}" style-focus="outline: var(--focus-outline); outline-offset: 3px;" style="{{ discStyle }}">{{ opsToggleLabel }}</button>
+              </div>
+            </div>
+
+            <sc-if value="{{ openOps }}">
+            <div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+              <thead>
+                <tr style="background: #f0f0f0; text-align: left;">
+                  <th style="padding: 12px 28px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Measure</th>
+                  <th style="padding: 12px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Daily</th>
+                  <th style="padding: 12px 28px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">YTD</th>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ ops }}" as="row" hint-placeholder-count="13">
+                  <tr style="{{ row.rowStyle }}">
+                    <td style="padding: 11px 28px;">{{ row.label }}</td>
+                    <td style="padding: 11px 12px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.daily }}</td>
+                    <td style="padding: 11px 28px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.ytd }}</td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table></div>
+            </sc-if>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 22px 26px 24px; display: flex; flex-direction: column; gap: 16px;">
+              <div style="font-family: Merriweather, Georgia, serif; font-size: 22px; font-weight: 700;">V.c. New form intake</div>
+              <div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+                <thead>
+                  <tr style="text-align: left;">
+                    <th style="padding: 8px 0; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Return date</th>
+                    <th style="padding: 8px 0; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Form</th>
+                    <th style="padding: 8px 0; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Returns</th>
+                    <th style="padding: 8px 0; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Documents</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td style="padding: 11px 0; border-bottom: 1px solid #dfe1e2;">{{ procDay }}</td><td style="padding: 11px 0; border-bottom: 1px solid #dfe1e2;">Form N&#8209;1</td><td style="padding: 11px 0; text-align: right; font-family: 'Roboto Mono', monospace; border-bottom: 1px solid #dfe1e2;">104,220</td><td style="padding: 11px 0; text-align: right; font-family: 'Roboto Mono', monospace; border-bottom: 1px solid #dfe1e2;">106,050</td></tr>
+                  <tr><td style="padding: 11px 0; font-weight: 700;">Sum</td><td style="padding: 11px 0;"></td><td style="padding: 11px 0; text-align: right; font-family: 'Roboto Mono', monospace; font-weight: 700;">3,015,800</td><td style="padding: 11px 0; text-align: right; font-family: 'Roboto Mono', monospace; font-weight: 700;">3,068,400</td></tr>
+                </tbody>
+              </table></div>
+              <div style="border-top: 1px solid #dfe1e2; padding-top: 16px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="font-size: 15px; font-weight: 700;">Supplemental schedule (Form N&#8209;2)</div>
+                <div style="display: flex; justify-content: space-between; font-size: 15px;"><span style="color: #565c65;">{{ procDay }} returns received</span><span style="font-family: 'Roboto Mono', monospace; font-weight: 700;">2,051,300</span></div>
+                <div style="display: flex; justify-content: space-between; font-size: 15px;"><span style="color: #565c65;">Sum, season to date</span><span style="font-family: 'Roboto Mono', monospace; font-weight: 700;">50,884,600</span></div>
+              </div>
+            </div>
+
+            <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 22px 26px 24px; display: flex; flex-direction: column; gap: 16px;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <div style="font-family: Merriweather, Georgia, serif; font-size: 22px; font-weight: 700;">V.d. Performance projections</div>
+                <div style="font-size: 15px; color: #565c65;">MeF latency by hour &mdash; the acknowledgement batch window stays visible.</div>
+              </div>
+              <div style="display: flex; align-items: flex-end; gap: 3px; height: 120px; border-bottom: 1px solid #dfe1e2;">
+                <sc-for list="{{ latency }}" as="bar" hint-placeholder-count="24">
+                  <div style="{{ bar.style }}"></div>
+                </sc-for>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 13px; color: #71767a;"><span>12 a.m.</span><span>8 a.m.</span><span>4 p.m.</span><span>11 p.m.</span></div>
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; border-top: 1px solid #dfe1e2; padding-top: 14px;">
+                <div><div style="font-size: 13px; color: #565c65;">Peak, business hours</div><div style="font-size: 20px; font-weight: 700; font-family: 'Roboto Mono', monospace;">610 ms</div></div>
+                <div><div style="font-size: 13px; color: #565c65;">Peak, acknowledgement batch</div><div style="font-size: 20px; font-weight: 700; font-family: 'Roboto Mono', monospace; color: #8a7000;">1,350 ms</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="sec-maint" style="scroll-margin-top: 20px; background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 24px 28px 28px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-family: Merriweather, Georgia, serif; font-size: 24px; font-weight: 700;">Contact center maintenance schedule</div>
+            <div style="font-size: 15px; color: #565c65;">Lab (LAB&#8209;1, LAB&#8209;2, LAB&#8209;3) patching and testing, {{ labWindow }}.</div>
+          </div>
+          <div style="display: flex; gap: 10px; font-family: 'Roboto Mono', monospace; font-size: 14px;">
+            <span style="border: 1px solid #dfe1e2; border-radius: 4px; padding: 6px 10px;">DC&#8209;C CHG&#8209;0003</span>
+            <span style="border: 1px solid #dfe1e2; border-radius: 4px; padding: 6px 10px;">DC&#8209;A CHG&#8209;0002</span>
+            <span style="border: 1px solid #dfe1e2; border-radius: 4px; padding: 6px 10px;">DC&#8209;B CHG&#8209;0001</span>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0;">
+          <sc-for list="{{ maintPhases }}" as="phase" hint-placeholder-count="4">
+            <div style="{{ phase.wrapStyle }}">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                <span style="width: 26px; height: 26px; border-radius: 50%; background: #005ea2; color: #fff; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">{{ phase.num }}</span>
+                <span style="font-size: 16px; font-weight: 700;">{{ phase.name }}</span>
+              </div>
+              <div style="font-size: 13px; color: #71767a; margin-bottom: 10px;">{{ phase.note }}</div>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <sc-for list="{{ phase.rows }}" as="row" hint-placeholder-count="3">
+                  <div style="border-top: 1px solid #dfe1e2; padding-top: 8px;">
+                    <div style="font-size: 14px; font-weight: 700;">{{ row.site }}</div>
+                    <div style="font-size: 14px; color: #3d4551;">{{ row.time }}</div>
+                    <div style="font-size: 13px; color: #71767a;">{{ row.apps }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="font-size: 13px; color: #71767a; font-family: 'Roboto Mono', monospace;">App groups: IVR, Routing, TTY, Recording, Analytics, Directory services, Management, Workforce, Chat</div>
+      </div>
+
+      <div id="sec-6" style="scroll-margin-top: 20px; background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; overflow: hidden;">
+        <div style="padding: 22px 28px 16px; border-bottom: 1px solid #dfe1e2; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;">
+          <div style="font-family: Merriweather, Georgia, serif; font-size: 22px; font-weight: 700;">VI. CIO action items and critical issues</div>
+          <div style="font-size: 14px; color: #71767a;">[Update anticipated weekly on Tuesday]</div>
+        </div>
+        <div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+          <thead>
+            <tr style="background: #f0f0f0; text-align: left;">
+              <th style="padding: 12px 28px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Action item</th>
+              <th style="padding: 12px 16px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Date assigned</th>
+              <th style="padding: 12px 16px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Spokesperson</th>
+              <th style="padding: 12px 28px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Update</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #dfe1e2;">
+              <td style="padding: 14px 28px;">Provide a list of planned changes for the period of {{ changeWindow }}</td>
+              <td style="padding: 14px 16px; font-family: 'Roboto Mono', monospace;">{{ changeDate1 }}</td>
+              <td style="padding: 14px 16px; font-weight: 700;">Director, Change Management</td>
+              <td style="padding: 14px 28px;"><x-import component-from-global-scope="USWDSDesignSystem_fc84de.Tag" color="success" size="big" hint-size="60px,20px">Closed</x-import></td>
+            </tr>
+            <tr>
+              <td style="padding: 14px 28px;">Confirm supplemental schedule volumes against projections ahead of the deadline peak</td>
+              <td style="padding: 14px 16px; font-family: 'Roboto Mono', monospace;">{{ changeDate2 }}</td>
+              <td style="padding: 14px 16px; font-weight: 700;">Deputy Director, Returns Processing</td>
+              <td style="padding: 14px 28px;"><x-import component-from-global-scope="USWDSDesignSystem_fc84de.Tag" color="accent-warm" size="big" hint-size="60px,20px">Open</x-import></td>
+            </tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(430px, 1fr)); gap: 20px; align-items: start;">
+        <div id="sec-7" style="scroll-margin-top: 20px; background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 22px 26px 26px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="font-family: Merriweather, Georgia, serif; font-size: 22px; font-weight: 700;">VII. Filing season readiness open action items</div>
+          <div style="border: 1px solid #dfe1e2; border-left: 4px solid #00a91c; background: #ecf3ec; border-radius: 4px; padding: 20px 22px; display: flex; flex-direction: column; gap: 6px;">
+            <div style="font-size: 18px; font-weight: 700; color: #154c21;">[No carryovers for current season]</div>
+            <div style="font-size: 15px; color: #3d4551;">Nothing outstanding from the readiness calls. All 138 application reviews closed before start&#8209;up.</div>
+          </div>
+        </div>
+
+        <div id="sec-8" style="scroll-margin-top: 20px; background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 22px 26px 26px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="font-family: Merriweather, Georgia, serif; font-size: 22px; font-weight: 700;">VIII. Production outages</div>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Scheduled power outages</div>
+            <sc-for list="{{ outages }}" as="row" hint-placeholder-count="2">
+              <div style="display: grid; grid-template-columns: 1.4fr 1fr 0.9fr; gap: 12px; border-top: 1px solid #dfe1e2; padding-top: 12px; font-size: 15px;">
+                <div><div style="font-weight: 700;">{{ row.site }}</div><div style="font-size: 14px; color: #71767a;">{{ row.detail }}</div></div>
+                <div style="color: #3d4551;">{{ row.owner }}</div>
+                <div style="font-family: 'Roboto Mono', monospace;">{{ row.target }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div id="sec-9" style="scroll-margin-top: 20px; background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; overflow: hidden;">
+        <div style="padding: 22px 28px 16px; border-bottom: 1px solid #dfe1e2; display: flex; flex-direction: column; gap: 6px;">
+          <div style="font-family: Merriweather, Georgia, serif; font-size: 22px; font-weight: 700;">IX. Test progress &mdash; filing season start&#8209;up test status</div>
+          <div style="font-size: 15px; color: #565c65;">This report reflects ongoing start&#8209;up test efforts with planned implementation dates within the filing season start&#8209;up timeframe.</div>
+        </div>
+        <div style="overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+          <thead>
+            <tr style="background: #f0f0f0; text-align: left;">
+              <th style="padding: 12px 28px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Test project</th>
+              <th style="padding: 12px 12px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Goal</th>
+              <th style="padding: 12px 12px; text-align: right; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">ACT %</th>
+              <th style="padding: 12px 12px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Impl date</th>
+              <th style="padding: 12px 12px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Overall status</th>
+              <th style="padding: 12px 28px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551; border-bottom: 1px solid #dfe1e2;">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{ estRows }}" as="row" hint-placeholder-count="10">
+              <tr style="border-bottom: 1px solid #dfe1e2;">
+                <td style="padding: 12px 28px; font-weight: 700;">{{ row.project }}</td>
+                <td style="padding: 12px 12px; color: #3d4551;">{{ row.goal }}</td>
+                <td style="padding: 12px 12px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.act }}</td>
+                <td style="padding: 12px 12px; font-family: 'Roboto Mono', monospace;">{{ row.impl }}</td>
+                <td style="padding: 12px 12px;"><div style="{{ row.statusStyle }}"><span style="{{ row.dot }}"></span>{{ row.status }}</div></td>
+                <td style="padding: 12px 28px; color: #3d4551;">{{ row.notes }}</td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(430px, 1fr)); gap: 20px; align-items: start;">
+        <div id="sec-10" style="scroll-margin-top: 20px; background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 22px 26px 26px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="font-family: Merriweather, Georgia, serif; font-size: 22px; font-weight: 700;">X. Any questions or comments</div>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: grid; grid-template-columns: 80px 1fr; gap: 14px; border-top: 1px solid #dfe1e2; padding-top: 12px; font-size: 15px;">
+              <x-import component-from-global-scope="USWDSDesignSystem_fc84de.Tag" color="primary" size="big" hint-size="40px,20px">IT</x-import>
+              <div>Asked whether the Data Center C agent desktop latency ticket should carry into the deadline&#8209;day report. Directors agreed to keep it open and reported.</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 80px 1fr; gap: 14px; border-top: 1px solid #dfe1e2; padding-top: 12px; font-size: 15px;">
+              <x-import component-from-global-scope="USWDSDesignSystem_fc84de.Tag" color="base" size="big" hint-size="70px,20px">Business</x-import>
+              <div>Requested supplemental schedule volume projections for the two days after the deadline.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 22px 26px 26px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="font-family: Merriweather, Georgia, serif; font-size: 22px; font-weight: 700;">Reference material</div>
+          <div style="display: flex; flex-direction: column; gap: 12px; font-size: 15px;">
+            <div style="border-top: 1px solid #dfe1e2; padding-top: 12px;"><a href="#sec-10">Change process reference guide</a></div>
+            <div style="border-top: 1px solid #dfe1e2; padding-top: 12px;"><a href="#sec-10">Change management process</a></div>
+            <div style="border-top: 1px solid #dfe1e2; padding-top: 12px;"><a href="#sec-10">On&#8209;call alerting self&#8209;service user guide</a><div style="font-size: 14px; color: #71767a;">Point&#8209;of&#8209;contact updates go through the ticketing portal.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(430px, 1fr)); gap: 24px;">
+        <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 24px 28px 28px; display: flex; flex-direction: column; gap: 20px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16px;">
+            <div style="font-family: Merriweather, Georgia, serif; font-size: 20px; font-weight: 700;">Status look&#8209;back</div>
+            <div style="font-size: 14px; color: #71767a;">Filing season to date &mdash; {{ seasonToDate }}</div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+            <div style="border: 1px solid #dfe1e2; border-top: 4px solid #00a91c; border-radius: 4px; padding: 16px;">
+              <div style="font-family: Merriweather, Georgia, serif; font-size: 30px; font-weight: 700;">58</div>
+              <div style="font-size: 14px; color: #565c65;">Green days</div>
+              <div style="font-size: 14px; color: #71767a; margin-top: 6px;">Prior season: 52 at this point</div>
+            </div>
+            <div style="border: 1px solid #dfe1e2; border-top: 4px solid #ffbe2e; border-radius: 4px; padding: 16px;">
+              <div style="font-family: Merriweather, Georgia, serif; font-size: 30px; font-weight: 700;">26</div>
+              <div style="font-size: 14px; color: #565c65;">Yellow days</div>
+              <div style="font-size: 14px; color: #71767a; margin-top: 6px;">Prior season: 31 at this point</div>
+            </div>
+            <div style="border: 1px solid #dfe1e2; border-top: 4px solid #d54309; border-radius: 4px; padding: 16px;">
+              <div style="font-family: Merriweather, Georgia, serif; font-size: 30px; font-weight: 700;">8</div>
+              <div style="font-size: 14px; color: #565c65;">Red days</div>
+              <div style="font-size: 14px; color: #71767a; margin-top: 6px;">Prior season: 9 at this point</div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Last 30 days</div>
+            <div style="display: flex; gap: 3px;">
+              <sc-for list="{{ lookback }}" as="day" hint-placeholder-count="30">
+                <div style="{{ day.style }}"></div>
+              </sc-for>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; color: #71767a;"><span>{{ trendStartMD }}</span><span>Today</span></div>
+          </div>
+        </div>
+
+        <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 24px 28px 28px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="font-family: Merriweather, Georgia, serif; font-size: 20px; font-weight: 700;">Returns processed by center</div>
+          <div style="font-size: 14px; color: #565c65;">Season to date, against the same point last season</div>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <sc-for list="{{ centerBars }}" as="row" hint-placeholder-count="5">
+              <div style="display: grid; grid-template-columns: minmax(72px, 0.9fr) minmax(60px, 1fr) auto auto; align-items: center; gap: 8px;">
+                <div style="font-size: 15px;">{{ row.name }}</div>
+                <div style="height: 16px; background: #eef1f3; border-radius: 2px;"><div style="{{ row.barStyle }}"></div></div>
+                <div style="font-size: 14px; text-align: right; font-family: 'Roboto Mono', monospace;">{{ row.value }}</div>
+                <div style="font-size: 14px; text-align: right; font-weight: 700;"><span style="{{ row.deltaStyle }}">{{ row.delta }}</span></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isEntry }}">
+  <div style="max-width: 1440px; margin: 0 auto; padding: 28px 40px 56px; display: flex; flex-direction: column; gap: 22px;">
+
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div style="font-family: Merriweather, Georgia, serif; font-size: 26px; font-weight: 700;">Set today&rsquo;s status &mdash; {{ todayDate }}</div>
+        <div style="font-size: 15px; color: #565c65;">The rule proposes a status from open production tickets. You decide. If you change it, say why.</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Concept</span>
+        <x-import component-from-global-scope="USWDSDesignSystem_fc84de.Button" variant="{{ takeAVariant }}" onClick="{{ pickTakeA }}" hint-size="210px,40px">A &middot; Review the whole day</x-import>
+        <x-import component-from-global-scope="USWDSDesignSystem_fc84de.Button" variant="{{ takeBVariant }}" onClick="{{ pickTakeB }}" hint-size="200px,40px">B &middot; One at a time</x-import>
+      </div>
+    </div>
+
+    <sc-if value="{{ isTakeA }}">
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 22px 28px; display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 18px;">
+          <div style="{{ overallSwatch }}"></div>
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">Section I &mdash; overall status to publish</div>
+            <div style="font-family: Merriweather, Georgia, serif; font-size: 26px; font-weight: 700;">{{ overallLabel }}</div>
+            <div style="font-size: 14px; color: #565c65;">{{ overallNote }}</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div style="font-size: 14px; color: #565c65; text-align: right; max-width: 26ch;">{{ progressNote }}</div>
+          <x-import component-from-global-scope="USWDSDesignSystem_fc84de.Button" size="big" onClick="{{ publish }}" hint-size="180px,52px">Publish agenda</x-import>
+        </div>
+      </div>
+
+      <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; overflow: hidden;">
+        <div style="padding: 18px 28px 14px; border-bottom: 1px solid #dfe1e2;">
+          <div style="font-family: Merriweather, Georgia, serif; font-size: 20px; font-weight: 700;">Section II &mdash; process areas</div>
+        </div>
+        <div style="display: grid; grid-template-columns: 2fr 1.1fr 1.5fr; gap: 24px; padding: 12px 28px; background: #f0f0f0; border-bottom: 1px solid #dfe1e2; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #3d4551;">
+          <div>Process area</div>
+          <div>Rule says</div>
+          <div>Published decision</div>
+        </div>
+        <sc-for list="{{ rows }}" as="row" hint-placeholder-count="7">
+          <div style="{{ row.rowStyle }}">
+            <div style="display: grid; grid-template-columns: 2fr 1.1fr 1.5fr; gap: 24px; padding: 18px 28px; align-items: start;">
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <div style="font-size: 17px; font-weight: 700;">{{ row.name }}</div>
+                <div style="font-size: 14px; color: #565c65;">{{ row.detail }}</div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <div><x-import component-from-global-scope="USWDSDesignSystem_fc84de.Tag" color="{{ row.suggestTag }}" size="big" hint-size="70px,20px">{{ row.suggestLabel }}</x-import></div>
+                <span style="font-size: 13px; color: #71767a;">{{ row.suggestWhy }}</span>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <sc-for list="{{ row.chips }}" as="chip" hint-placeholder-count="3">
+                  <button onClick="{{ chip.onClick }}" style-focus="outline: var(--focus-outline); outline-offset: 3px;" style="{{ chip.style }}">{{ chip.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <sc-if value="{{ row.override }}">
+              <div style="padding: 0 28px 18px;">
+                <x-import component-from-global-scope="USWDSDesignSystem_fc84de.Alert" type="warning" hint-size="100%,140px">
+                  <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div style="font-size: 15px; font-weight: 700;">You changed this from {{ row.suggestWord }} to {{ row.chosenWord }}. Reason required.</div>
+                    <textarea onChange="{{ row.onReason }}" value="{{ row.reason }}" placeholder="e.g. Open ticket does not affect daily processing, but directors agreed to report it." rows="2" style="width: 100%; box-sizing: border-box; font-family: inherit; font-size: 15px; line-height: 1.4; padding: 10px 12px; border: 2px solid #565c65; border-radius: 2px; resize: vertical;"></textarea>
+                    <div style="font-size: 13px; color: #565c65;">Recorded with your name and the pre&#8209;brief time. Visible on the agenda and in look&#8209;back.</div>
+                  </div>
+                </x-import>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; overflow: hidden;">
+        <div style="padding: 18px 28px 14px; border-bottom: 1px solid #dfe1e2; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;">
+          <div style="font-family: Merriweather, Georgia, serif; font-size: 20px; font-weight: 700;">Section IV &mdash; contact center components</div>
+          <div style="font-size: 14px; color: #565c65;">{{ componentNote }}</div>
+        </div>
+        <sc-for list="{{ componentRows }}" as="row" hint-placeholder-count="13">
+          <div style="{{ row.rowStyle }}">
+            <div style="display: grid; grid-template-columns: 2fr 1.1fr 1.5fr; gap: 24px; padding: 14px 28px; align-items: center;">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-size: 16px; font-weight: 700;">{{ row.name }}</div>
+                <div style="font-size: 14px; color: #565c65;">{{ row.detail }}</div>
+              </div>
+              <div><x-import component-from-global-scope="USWDSDesignSystem_fc84de.Tag" color="{{ row.suggestTag }}" size="big" hint-size="70px,20px">{{ row.suggestLabel }}</x-import></div>
+              <div style="display: flex; gap: 8px;">
+                <sc-for list="{{ row.chips }}" as="chip" hint-placeholder-count="3">
+                  <button onClick="{{ chip.onClick }}" style-focus="outline: var(--focus-outline); outline-offset: 3px;" style="{{ chip.style }}">{{ chip.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <sc-if value="{{ row.override }}">
+              <div style="padding: 0 28px 16px;">
+                <x-import component-from-global-scope="USWDSDesignSystem_fc84de.Alert" type="warning" hint-size="100%,130px">
+                  <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div style="font-size: 15px; font-weight: 700;">Reason required for {{ row.chosenWord }} instead of {{ row.suggestWord }}.</div>
+                    <textarea onChange="{{ row.onReason }}" value="{{ row.reason }}" placeholder="e.g. Monitoring intermittent agent desktop latency." rows="2" style="width: 100%; box-sizing: border-box; font-family: inherit; font-size: 15px; line-height: 1.4; padding: 10px 12px; border: 2px solid #565c65; border-radius: 2px; resize: vertical;"></textarea>
+                  </div>
+                </x-import>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display: flex; gap: 20px; align-items: flex-start; background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 20px 28px;">
+        <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65; padding-top: 2px; white-space: nowrap;">Report legend</div>
+        <div style="display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; color: #3d4551;">
+          <div style="display: flex; gap: 8px; align-items: center;"><span style="width: 12px; height: 12px; background: #d54309; border-radius: 2px;"></span>Red &mdash; delayed or in jeopardy; includes open P1</div>
+          <div style="display: flex; gap: 8px; align-items: center;"><span style="width: 12px; height: 12px; background: #ffbe2e; border-radius: 2px;"></span>Yellow &mdash; behind schedule; includes open P2</div>
+          <div style="display: flex; gap: 8px; align-items: center;"><span style="width: 12px; height: 12px; background: #00a91c; border-radius: 2px;"></span>Green &mdash; on schedule, no production issues</div>
+          <div style="display: flex; gap: 8px; align-items: center;"><span style="width: 12px; height: 12px; background: #005ea2; border-radius: 2px;"></span>Blue &mdash; complete, used in Section IX test status</div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isTakeB }}">
+    <div style="display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start;">
+      <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+        <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">{{ progressNote }}</div>
+        <sc-for list="{{ railItems }}" as="item" hint-placeholder-count="8">
+          <button onClick="{{ item.onClick }}" style-focus="outline: var(--focus-outline); outline-offset: 3px;" style="{{ item.style }}">
+            <span style="{{ item.dotStyle }}"></span>
+            <span style="flex: 1; text-align: left;">{{ item.name }}</span>
+            <span style="font-size: 13px; color: #71767a;">{{ item.state }}</span>
+          </button>
+        </sc-for>
+      </div>
+
+      <div style="background: #fff; border: 1px solid #dfe1e2; border-radius: 8px; padding: 32px 36px 28px; display: flex; flex-direction: column; gap: 24px;">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #565c65;">{{ stepLabel }}</div>
+          <div style="font-family: Merriweather, Georgia, serif; font-size: 30px; font-weight: 700;">{{ current.name }}</div>
+          <div style="font-size: 16px; color: #3d4551;">{{ current.detail }}</div>
+        </div>
+
+        <sc-if value="{{ current.isGroup }}">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <sc-for list="{{ componentRows }}" as="row" hint-placeholder-count="13">
+              <div style="display: grid; grid-template-columns: 1.6fr 0.8fr 1.2fr; gap: 20px; align-items: center; border-top: 1px solid #dfe1e2; padding-top: 10px;">
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                  <div style="font-size: 16px; font-weight: 700;">{{ row.name }}</div>
+                  <div style="font-size: 14px; color: #565c65;">{{ row.detail }}</div>
+                </div>
+                <div><x-import component-from-global-scope="USWDSDesignSystem_fc84de.Tag" color="{{ row.suggestTag }}" size="big" hint-size="70px,20px">{{ row.suggestLabel }}</x-import></div>
+                <div style="display: flex; gap: 8px;">
+                  <sc-for list="{{ row.chips }}" as="chip" hint-placeholder-count="3">
+                    <button onClick="{{ chip.onClick }}" style-focus="outline: var(--focus-outline); outline-offset: 3px;" style="{{ chip.style }}">{{ chip.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ current.isSingle }}">
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+            <div style="{{ current.calloutStyle }}">
+              <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="{{ current.calloutSwatch }}"></div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <div style="font-size: 18px; font-weight: 700;">The rule proposes {{ current.suggestWord }}</div>
+                  <div style="font-size: 15px; color: #3d4551;">{{ current.suggestWhy }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="font-size: 17px; font-weight: 700;">What did the room decide?</div>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                <sc-for list="{{ current.bigChips }}" as="chip" hint-placeholder-count="3">
+                  <button onClick="{{ chip.onClick }}" style-focus="outline: var(--focus-outline); outline-offset: 3px;" style="{{ chip.style }}">
+                    <span style="{{ chip.swatch }}"></span>
+                    <span style="font-size: 19px; font-weight: 700;">{{ chip.label }}</span>
+                    <span style="font-size: 13px; color: #565c65; text-align: center; line-height: 1.35;">{{ chip.hint }}</span>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+
+            <sc-if value="{{ current.override }}">
+              <x-import component-from-global-scope="USWDSDesignSystem_fc84de.Alert" type="warning" heading="Reason required" hint-size="100%,180px">
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <div style="font-size: 16px; font-weight: 700;">Why {{ current.chosenWord }} instead of {{ current.suggestWord }}?</div>
+                  <textarea onChange="{{ current.onReason }}" value="{{ current.reason }}" placeholder="e.g. Ticket does not affect filing season or daily processing, but directors agreed an open ticket should be reported." rows="3" style="width: 100%; box-sizing: border-box; font-family: inherit; font-size: 16px; line-height: 1.45; padding: 12px; border: 2px solid #565c65; border-radius: 2px; resize: vertical;"></textarea>
+                  <div style="font-size: 14px; color: #565c65;">Stored with the status so next season&rsquo;s look&#8209;back shows the judgment, not just the color.</div>
+                </div>
+              </x-import>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <div style="border-top: 1px solid #dfe1e2; padding-top: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+          <x-import component-from-global-scope="USWDSDesignSystem_fc84de.Button" variant="unstyled" onClick="{{ prevStep }}" hint-size="50px,24px">Back</x-import>
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="font-size: 14px; color: #565c65;">{{ overallNote }}</div>
+            <x-import component-from-global-scope="USWDSDesignSystem_fc84de.Button" size="big" onClick="{{ nextStep }}" hint-size="220px,52px">{{ nextLabel }}</x-import>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ published }}">
+      <div style="position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); background: #162e51; color: #fff; padding: 16px 24px; border-radius: 4px; display: flex; align-items: center; gap: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); font-size: 16px;">
+        <span>{{ publishMessage }}</span>
+        <button onClick="{{ goDashboard }}" style-focus="outline: var(--focus-outline); outline-offset: 3px;" style="background: transparent; color: #fff; border: 2px solid #fff; border-radius: 4px; font-family: inherit; font-size: 15px; font-weight: 700; padding: 8px 14px; cursor: pointer;">View agenda</button>
+      </div>
+    </sc-if>
+
+  </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1000}}">
+// Every date in this mockup is computed from today, so it never goes stale.
+// Offsets keep the original spacing (the design was drawn with today = a Wednesday).
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const TODAY = (() => { const d = new Date(); d.setHours(12, 0, 0, 0); return d; })();
+const addDays = (base, n) => { const d = new Date(base); d.setDate(d.getDate() + n); return d; };
+const PROC_DAY = (() => { let d = addDays(TODAY, -1); while (d.getDay() === 0 || d.getDay() === 6) d = addDays(d, -1); return d; })();
+const pad2 = n => String(n).padStart(2, "0");
+const fmtMDY = d => pad2(d.getMonth() + 1) + "/" + pad2(d.getDate()) + "/" + d.getFullYear();
+const fmtMD = d => pad2(d.getMonth() + 1) + "/" + pad2(d.getDate());
+const fmtShort = d => (d.getMonth() + 1) + "/" + d.getDate();
+const fmtLong = d => MONTHS[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+const fmtRange = (a, b) => MONTHS[a.getMonth()] + " " + a.getDate() + "–" +
+  (a.getMonth() === b.getMonth() ? "" : MONTHS[b.getMonth()] + " ") + b.getDate();
+const fromToday = n => fmtMDY(addDays(TODAY, n));
+const cycleCode = d => {
+  // ISO-8601 week-numbering year + week, e.g. "YYYYWW".
+  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7));
+  const week = Math.ceil(((t - Date.UTC(t.getUTCFullYear(), 0, 1)) / 864e5 + 1) / 7);
+  return t.getUTCFullYear() + pad2(week);
+};
+const SEASON_START = addDays(TODAY, -91);
+const DATES = {
+  todayLong: WEEKDAYS[TODAY.getDay()] + ", " + fmtLong(TODAY),
+  todayDate: fmtLong(TODAY),
+  procDay: fmtMDY(PROC_DAY),
+  procWeekday: WEEKDAYS[PROC_DAY.getDay()],
+  procMD: fmtMD(PROC_DAY),
+  procMD4: fmtMD(addDays(PROC_DAY, -4)),
+  procMD3: fmtMD(addDays(PROC_DAY, -3)),
+  procMD2: fmtMD(addDays(PROC_DAY, -2)),
+  procMD1: fmtMD(addDays(PROC_DAY, -1)),
+  procMD0: fmtMD(PROC_DAY),
+  cycleCode: cycleCode(PROC_DAY),
+  peakMD: fmtMD(addDays(PROC_DAY, -8)),
+  axisStartMD: fmtMD(addDays(PROC_DAY, -29)),
+  axisMidMD: fmtMD(addDays(PROC_DAY, -14)),
+  seasonStartShort: fmtShort(SEASON_START) + "/" + pad2(SEASON_START.getFullYear() % 100),
+  seasonToDate: fmtShort(SEASON_START) + " to " + fmtShort(TODAY),
+  labWindow: fmtRange(addDays(TODAY, 1), addDays(TODAY, 2)),
+  changeWindow: fmtRange(addDays(TODAY, -6), TODAY),
+  changeDate1: fromToday(-7),
+  changeDate2: fromToday(-2),
+  trendStartMD: fmtMD(addDays(TODAY, -29))
+};
+const siteWindow = n => { const d = addDays(TODAY, n); return WEEKDAYS[d.getDay()].slice(0, 3) + " " + fmtShort(d); };
+const AREAS = [
+  { id: "sp", name: "Submission processing", detail: "Scanning, data capture, paper receipts", p1: 0, p2: 0 },
+  { id: "ind", name: "Individual accounts", detail: "Daily posting cycle", p1: 0, p2: 0 },
+  { id: "bus", name: "Business accounts", detail: "Business posting and turnover", p1: 0, p2: 0 },
+  { id: "mef", name: "Modernized e-File", detail: "Acceptance and acknowledgement latency", p1: 0, p2: 1, why: "1 open P2 — acknowledgement latency" },
+  { id: "refund", name: "Refund processing", detail: "EFT and paper disbursements", p1: 0, p2: 0 },
+  { id: "contact", name: "Contact center operations", detail: "Calls, chat, callback, self-service", p1: 0, p2: 1, why: "1 open P2 — Data Center C agent desktop" },
+  { id: "infra", name: "Infrastructure and networks", detail: "Batch processing, returns intake, returns review, alerting", p1: 0, p2: 0 }
+];
+
+const COMPONENTS = [
+  { id: "ivr-dca", name: "Voice portal (IVR)", detail: "Data Center A", site: "dca", comp: "ivr", p2: 0 },
+  { id: "ivr-dcb", name: "Voice portal (IVR)", detail: "Data Center B", site: "dcb", comp: "ivr", p2: 0 },
+  { id: "ivr-dcc", name: "Voice portal (IVR)", detail: "Data Center C", site: "dcc", comp: "ivr", p2: 0 },
+  { id: "route-dca", name: "Contact routing", detail: "Data Center A", site: "dca", comp: "route", p2: 0 },
+  { id: "route-dcb", name: "Contact routing", detail: "Data Center B", site: "dcb", comp: "route", p2: 0 },
+  { id: "route-dcc", name: "Contact routing", detail: "Data Center C", site: "dcc", comp: "route", p2: 1, comment: "Monitoring intermittent agent desktop latency" },
+  { id: "sites", name: "Call center sites", detail: "Enterprise", enterprise: true, p2: 0 },
+  { id: "desk", name: "IT service desk", detail: "Enterprise", enterprise: true, p2: 0 },
+  { id: "rec", name: "Contact recording", detail: "Enterprise", enterprise: true, p2: 0 },
+  { id: "wfm", name: "Workforce management (WFM)", detail: "Enterprise", enterprise: true, p2: 0 },
+  { id: "chat", name: "Chat and secure messaging", detail: "Enterprise", enterprise: true, p2: 0 },
+  { id: "civr", name: "Conversational IVR", detail: "Enterprise", enterprise: true, p2: 0 },
+  { id: "callback", name: "Customer callback", detail: "Enterprise", enterprise: true, p2: 0 }
+];
+
+const WORD = { green: "Green", yellow: "Yellow", red: "Red" };
+const DEFN = {
+  green: "On schedule — no identified production issues.",
+  yellow: "Behind schedule — not critical to filing season.",
+  red: "Delayed or in jeopardy — critical impact to filing season."
+};
+const FILL = { green: "#00a91c", yellow: "#ffbe2e", red: "#d54309", blue: "#005ea2" };
+const EDGE = { green: "#008817", yellow: "#e5a000", red: "#b50909", blue: "#1a4480" };
+const TINT = { green: "#ecf3ec", yellow: "#faf3d1", red: "#f4e3db", blue: "#e8f0f8" };
+const INK  = { green: "#154c21", yellow: "#5c4809", red: "#6f3331", blue: "#1a4480" };
+const HINT = { green: "No open production issues", yellow: "Behind schedule, not critical", red: "Delayed or in jeopardy" };
+const TAG  = { green: "success", yellow: "accent-warm", red: "secondary", blue: "primary" };
+const RANK = { green: 0, yellow: 1, red: 2 };
+
+const FEEDS = [
+  { name: "ITSM", landed: "6:02a" }, { name: "Intake run", landed: "4:06a" },
+  { name: "Ops status", landed: "4:41a" }, { name: "Contact center", landed: "5:38a" },
+  { name: "Morning ops check", landed: "5:51a" }, { name: "Refund data", landed: "4:22a" },
+  { name: "Maintenance", landed: "3:20a" }, { name: "Test status", landed: "5:15a" }
+];
+
+const INCIDENTS = [
+  { priority: "P2", tag: "accent-warm", ticket: "INC-0001", system: "Contact routing (DC C)", impact: "Intermittent agent desktop latency; no call loss", age: "1d 4h", owner: "Contact Center Ops", open: true },
+  { priority: "P2", tag: "accent-warm", ticket: "INC-0002", system: "MeF", impact: "Acknowledgement batch window running long; acknowledgements current", age: "11h", owner: "MeF Operations", open: true },
+  { priority: "P1 — closed", tag: "light", ticket: "INC-0003", system: "Posting cycle", impact: "Daily posting cycle completed on time after retry", age: "Closed 6h ago", open: false },
+  { priority: "P2 — closed", tag: "light", ticket: "INC-0004", system: "Refund status lookup", impact: "Status lookup latency resolved 02:41", age: "Closed 9h ago", open: false }
+];
+
+// All figures below are invented sample data (the OPS turnover figures match the synthetic MeF seed).
+const CC_METRICS = [
+  ["Calls answered", "386,420", "2,512,300", "9,204,850", "8,611,200", "+6.9%", 1],
+  ["Level of service", "76.5%", "78.1%", "79.2%", "81.0%", "−1.8%", -1],
+  ["Average speed of answer", "9:55", "8:47", "8:20", "7:15", "+14.9%", -1],
+  ["Chats handled", "41,300", "268,900", "951,200", "812,400", "+17.1%", 1],
+  ["Callbacks accepted", "47,850", "311,600", "1,108,300", "942,700", "+17.6%", 1],
+  ["Max IVR ports", "11,800", "13,450", "15,200", "14,600", "+4.1%", 1]
+];
+
+const VOICE = [
+  ["Account balance", "81,200", "527,560", "1,871,660", "1,759,590", "+6.4%", 1],
+  ["Payment plans", "11,350", "72,970", "255,560", "234,610", "+8.9%", 1],
+  ["Notices", "5,720", "36,470", "135,110", "125,690", "+7.5%", 1],
+  ["Service desk", "19,880", "129,360", "457,260", "438,720", "+4.2%", 1],
+  ["Appointments", "4,510", "29,300", "108,880", "104,270", "+4.4%", 1],
+  ["Forms and publications", "117,400", "762,380", "2,716,850", "2,603,480", "+4.4%", 1],
+  ["Refund status", "189,300", "1,230,710", "4,367,890", "NA", "—", 0],
+  ["Office locator", "16,900", "109,410", "383,420", "NA", "—", 0],
+  ["Records request", "195,200", "1,269,080", "4,513,120", "4,327,160", "+4.3%", 1],
+  ["Status lookup", "1,768,900", "11,497,400", "40,854,120", "38,060,480", "+7.3%", 1],
+  ["Amended status", "39,100", "253,520", "903,700", "848,430", "+6.5%", 1],
+  ["Voice channel — IVR — Total", "2,449,460", "15,918,160", "56,567,570", "52,817,530", "+7.1%", 1]
+];
+
+const INTAKE_DAILY = [
+  ["Center A", "1,302,450", "1,268,586", "33,864", "2.6%"],
+  ["Center B", "1,218,300", "1,190,279", "28,021", "2.3%"],
+  ["Center C", "702,880", "688,822", "14,058", "2.0%"],
+  ["Center D", "668,140", "652,773", "15,367", "2.3%"],
+  ["Center E", "559,730", "545,177", "14,553", "2.6%"],
+  ["Combined", "4,451,500", "4,345,637", "105,863", "2.4%"]
+];
+
+const INTAKE_CUM = [
+  ["Center A", "32,804,110", "31,918,399", "885,711", "2.7%"],
+  ["Center B", "30,196,540", "29,471,823", "724,717", "2.4%"],
+  ["Center C", "17,652,390", "17,264,037", "388,353", "2.2%"],
+  ["Center D", "16,730,820", "16,329,280", "401,540", "2.4%"],
+  ["Center E", "13,887,260", "13,498,417", "388,843", "2.8%"],
+  ["Combined", "111,271,120", "108,481,956", "2,789,164", "2.5%"]
+];
+
+const ERROR_GRID = [
+  ["Center A", [2.4, 2.5, 2.8, 2.7, 2.6]],
+  ["Center B", [2.2, 2.1, 2.5, 2.4, 2.3]],
+  ["Center C", [1.9, 2.0, 2.2, 2.1, 2.0]],
+  ["Center D", [2.1, 2.2, 2.4, 2.5, 2.3]],
+  ["Center E", [2.5, 2.7, 3.0, 2.8, 2.6]]
+];
+
+const OPS = [
+  ["Total submitted (federal and state)", "11,011,052", "237,936,075", 1],
+  ["Total federal (individual and business)", "7,023,430", "159,674,852", 1],
+  ["Total states", "3,987,622", "78,261,223", 1],
+  ["Total individual (including extensions)", "6,095,041", "132,444,846", 0],
+  ["Individual accepted", "5,482,137", "118,264,509", 0],
+  ["Individual rejected", "612,904", "14,180,337", 0],
+  ["Individual reject rate", "10.06%", "10.71%", 2],
+  ["Total individual state", "3,706,215", "71,358,490", 0],
+  ["Total business", "928,389", "27,230,006", 0],
+  ["Business accepted", "903,516", "26,417,062", 0],
+  ["Business rejected", "24,873", "812,944", 0],
+  ["Business reject rate", "2.68%", "2.99%", 2],
+  ["Total business state", "281,407", "6,902,733", 0]
+];
+
+const EST = [
+  ["Core filing", "Full regression", "100%", fromToday(-96), "blue", "Complete, signed off"],
+  ["MeF schema R2", "Schema validation", "100%", fromToday(-89), "blue", "Complete"],
+  ["Posting cycle", "Cycle simulation", "94%", fromToday(9), "green", "On track"],
+  ["Supplemental schedule intake", "Volume test", "85%", fromToday(9), "green", "On track"],
+  ["Refund status refresh", "Load and failover", "71%", fromToday(16), "yellow", "Retest scheduled " + fmtMD(addDays(TODAY, 5))],
+  ["IVR release 4", "Call flow validation", "89%", fromToday(13), "green", "On track"],
+  ["Secure messaging", "End-to-end", "100%", fromToday(-47), "blue", "Complete"],
+  ["WFM upgrade", "Integration", "58%", fromToday(23), "yellow", "Dependent on " + fmtShort(addDays(TODAY, 9)) + " patch window"],
+  ["Contact recording", "Capture validation", "100%", fromToday(-33), "blue", "Complete"],
+  ["On-call notification", "Alert routing", "81%", fromToday(15), "green", "On track"]
+];
+
+const OUTAGES = [
+  { site: "Data Center A — building 2 feed", detail: "Generator transfer test, systems on UPS", owner: "Facilities / DC A", target: fromToday(3) },
+  { site: "Data Center C — maintenance lab", detail: "Panel replacement, lab only", owner: "Facilities / DC C", target: fromToday(7) }
+];
+
+const MAINT_PHASES = [
+  { num: "1", name: "Remove traffic", note: "Traffic drained per site", rows: [
+    { site: "DC C", time: siteWindow(8) + ", 10 p.m.", apps: "" },
+    { site: "DC A", time: siteWindow(9) + ", 10 p.m. EST", apps: "" },
+    { site: "DC B", time: siteWindow(10) + ", 10 p.m. EST", apps: "or anytime after DC B restore" }
+  ]},
+  { num: "2", name: "Patching", note: "Parent and application groups", rows: [
+    { site: "DC C parent", time: "IVR 11 p.m.–4 a.m. EST", apps: "" },
+    { site: "WFM PROD (DC B)", time: "8 a.m.–4 p.m. EST", apps: "" },
+    { site: "DC A", time: "11 p.m.–8 a.m. EST", apps: "Full app list; WFM (DC A)" },
+    { site: "DC B", time: "11 p.m.–8 a.m. EST", apps: "Full app list" }
+  ]},
+  { num: "3", name: "Testing and validation", note: "Vendor, COTS and internal test teams", rows: [
+    { site: "Data Center C", time: "Fri 5–6 a.m.", apps: "IVR, WFM" },
+    { site: "Data Center A", time: "Sat 8 a.m.–12 p.m.", apps: "IVR, Recording, Analytics, Routing" },
+    { site: "Data Center B", time: "Sun 8 a.m.–12 p.m.", apps: "IVR, Recording, Analytics, Routing" }
+  ]},
+  { num: "4", name: "Restore traffic", note: "After test confirmation", rows: [
+    { site: "DC C", time: "After test confirmation", apps: "" },
+    { site: "DC A", time: "After test confirmation", apps: "" },
+    { site: "DC B", time: "After test confirmation", apps: "" }
+  ]}
+];
+
+const CENTERS = [
+  ["Center A", "32,804,110", "+3.2%", 100, 1],
+  ["Center B", "30,196,540", "+2.8%", 92, 1],
+  ["Center C", "17,652,390", "+2.1%", 54, 1],
+  ["Center D", "16,730,820", "+2.6%", 51, 1],
+  ["Center E", "13,887,260", "−1.9%", 42, -1]
+];
+
+const LOOKBACK = ["green","yellow","green","green","green","green","yellow","green","green","red","yellow","green","green","yellow","green","green","green","yellow","red","green","yellow","green","green","green","yellow","green","yellow","green","green","yellow"];
+const LATENCY = [15,12,13,15,19,28,39,47,52,50,46,48,51,54,50,44,41,38,43,55,98,121,110,62];
+const REFUNDS = [36,43,41,50,55,47,39,40,52,58,65,70,61,50,42,56,71,85,92,79,88,100,68,83,94,90,74,66,78,84];
+
+const LOS = [80,82,79,81,83,78,75,77,81,82,84,80,76,74,79,81,83,82,78,75,73,76,80,81,79,77,74,72,74,76];
+const CHANNELS = [
+  ["Self-service (IVR)", 2449460, "#005ea2"],
+  ["Calls answered by an assistor", 386420, "#2378c3"],
+  ["Callbacks accepted", 47850, "#73b3e7"],
+  ["Chats and secure messaging", 41300, "#aacdec"]
+];
+const VOICE_TOP = [
+  ["Status lookup", "1,768,900", 100, "+7.3%", 1],
+  ["Records request", "195,200", 11, "+4.3%", 1],
+  ["Refund status", "189,300", 11, "—", 0],
+  ["Forms and publications", "117,400", 7, "+4.4%", 1],
+  ["Account balance", "81,200", 5, "+6.4%", 1],
+  ["Service desk", "19,880", 1, "+4.2%", 1]
+];
+const INTAKE_BARS = [
+  ["Center A", "1,302,450", 100, 2.6],
+  ["Center B", "1,218,300", 94, 2.3],
+  ["Center C", "702,880", 54, 2.0],
+  ["Center D", "668,140", 51, 2.3],
+  ["Center E", "559,730", 43, 2.6]
+];
+const OPS_BARS = [
+  ["Individual — including extensions", "6,095,041", "5,482,137", "612,904", 89.94, 10.06, "10.06%", "10.71%"],
+  ["Business", "928,389", "903,516", "24,873", 97.32, 2.68, "2.68%", "2.99%"]
+];
+
+function suggest(s) { return (s.p1 || 0) > 0 ? "red" : (s.p2 || 0) > 0 ? "yellow" : "green"; }
+function why(s) { return s.why || (s.comment ? s.comment : "No open P1 or P2 tickets"); }
+
+class Component extends DCLogic {
+  state = { view: "dashboard", take: "A", step: 0, decisions: {}, published: false, entitle: false, active: "sec-1", open: {} };
+
+  flip(key) {
+    this.setState(s => ({ open: { ...s.open, [key]: !s.open[key] } }));
+  }
+
+  componentDidMount() {
+    this._timer = setTimeout(() => {
+      const els = Array.prototype.slice.call(document.querySelectorAll('[id^="sec-"]'));
+      if (!els.length || typeof IntersectionObserver === "undefined") return;
+      this._io = new IntersectionObserver(entries => {
+        entries.forEach(en => { if (en.isIntersecting) this.setState({ active: en.target.id }); });
+      }, { rootMargin: "-12% 0px -78% 0px" });
+      els.forEach(el => this._io.observe(el));
+    }, 800);
+  }
+  componentWillUnmount() {
+    clearTimeout(this._timer);
+    if (this._io) this._io.disconnect();
+  }
+  navLink(active, open) {
+    return {
+      display: "flex", alignItems: "center", gap: "10px",
+      padding: open ? "9px 18px" : "10px 0",
+      justifyContent: open ? "flex-start" : "center",
+      fontSize: "14px", fontWeight: active ? 700 : 400, textDecoration: "none",
+      color: active ? "#1a4480" : "#1b1b1b",
+      background: active ? "#e8f0f8" : "transparent",
+      borderLeft: active ? "4px solid #005ea2" : "4px solid transparent"
+    };
+  }
+
+  set(id, status) {
+    this.setState(s => ({ decisions: { ...s.decisions, [id]: { ...(s.decisions[id] || {}), status } } }));
+  }
+  reason(id, text) {
+    this.setState(s => ({ decisions: { ...s.decisions, [id]: { ...(s.decisions[id] || {}), reason: text } } }));
+  }
+  chosen(s) {
+    const d = this.state.decisions[s.id];
+    return (d && d.status) || suggest(s);
+  }
+  tab(active) {
+    return {
+      fontFamily: "inherit", fontSize: "16px", fontWeight: 700, padding: "14px 22px",
+      border: 0, borderBottom: active ? "4px solid #face00" : "4px solid transparent",
+      background: active ? "rgba(255,255,255,0.10)" : "transparent",
+      color: active ? "#fff" : "#dfe1e2", cursor: "pointer"
+    };
+  }
+  chip(color, selected) {
+    return {
+      fontFamily: "inherit", fontSize: "15px", fontWeight: 700, padding: "9px 14px",
+      borderRadius: "4px", cursor: "pointer", minWidth: "74px",
+      background: selected ? FILL[color] : "var(--color-white)",
+      color: selected ? (color === "yellow" ? "var(--theme-ink)" : "#fff") : "var(--theme-base)",
+      border: selected ? "2px solid " + EDGE[color] : "2px solid var(--theme-base-light)"
+    };
+  }
+  bigChip(color, selected) {
+    return {
+      display: "flex", flexDirection: "column", alignItems: "center", gap: "8px",
+      fontFamily: "inherit", padding: "20px 12px", borderRadius: "6px", cursor: "pointer",
+      background: selected ? TINT[color] : "var(--color-white)",
+      color: selected ? INK[color] : "var(--theme-ink)",
+      border: selected ? "3px solid " + EDGE[color] : "2px solid var(--theme-base-light)"
+    };
+  }
+  statusPill(color, label) {
+    return {
+      display: "inline-flex", alignItems: "center", gap: "8px", background: TINT[color],
+      color: INK[color], border: "1px solid " + EDGE[color], borderRadius: "999px",
+      padding: "4px 12px", fontSize: "14px", fontWeight: 700
+    };
+  }
+  dot(color, size) {
+    return { width: size + "px", height: size + "px", borderRadius: "2px", background: FILL[color], display: "inline-block", flexShrink: 0 };
+  }
+  delta(dir) {
+    return { color: dir > 0 ? "#2d6b34" : dir < 0 ? "#b50909" : "#71767a", fontWeight: 700 };
+  }
+  overall() {
+    let worst = "green";
+    AREAS.forEach(s => { if (RANK[this.chosen(s)] > RANK[worst]) worst = this.chosen(s); });
+    return worst;
+  }
+
+  decisionRows(list, compact) {
+    return list.map(s => {
+      const sug = suggest(s), cho = this.chosen(s), ovr = sug !== cho;
+      const d = this.state.decisions[s.id] || {};
+      return {
+        name: s.name, detail: s.detail,
+        suggestLabel: WORD[sug], suggestWord: WORD[sug], chosenWord: WORD[cho],
+        suggestTag: TAG[sug], suggestWhy: why(s), override: ovr, reason: d.reason || "",
+        rowStyle: { borderBottom: "1px solid #dfe1e2", background: ovr ? "#fefaf0" : "#fff" },
+        onReason: e => this.reason(s.id, e.target.value),
+        chips: ["green", "yellow", "red"].map(c => ({
+          label: WORD[c], style: this.chip(c, cho === c), onClick: () => this.set(s.id, c)
+        }))
+      };
+    });
+  }
+
+  siteCell(comp, site) {
+    const c = COMPONENTS.find(x => x.comp === comp && x.site === site);
+    const st = this.chosen(c);
+    return { label: WORD[st], style: this.statusPill(st), dot: this.dot(st, 10), comment: c.comment || "" };
+  }
+
+  renderVals() {
+    const st = this.state;
+    const steps = AREAS.concat([{ id: "components", name: "Section IV — contact center components", detail: "Component status by site and enterprise-wide", group: true }]);
+    const stepIdx = Math.min(st.step, steps.length - 1);
+    const cur = steps[stepIdx];
+    const curSug = cur.group ? "green" : suggest(cur);
+    const curCho = cur.group ? "green" : this.chosen(cur);
+    const curD = st.decisions[cur.id] || {};
+    const last = stepIdx >= steps.length - 1;
+    const decided = AREAS.filter(s => st.decisions[s.id] && st.decisions[s.id].status).length;
+    const overrides = AREAS.concat(COMPONENTS).filter(s => this.chosen(s) !== suggest(s));
+    const missing = overrides.filter(s => !(st.decisions[s.id] || {}).reason);
+    const ov = this.overall();
+    const compDecided = COMPONENTS.filter(s => st.decisions[s.id] && st.decisions[s.id].status).length;
+
+    const ivr = { dca: this.siteCell("ivr", "dca"), dcb: this.siteCell("ivr", "dcb"), dcc: this.siteCell("ivr", "dcc") };
+    const route = { dca: this.siteCell("route", "dca"), dcb: this.siteCell("route", "dcb"), dcc: this.siteCell("route", "dcc") };
+
+    return {
+      ...DATES,
+      isDashboard: st.view === "dashboard",
+      isEntry: st.view === "entry",
+      isTakeA: st.view === "entry" && st.take === "A",
+      isTakeB: st.view === "entry" && st.take === "B",
+      published: st.published,
+      publishMessage: "Status published for " + DATES.todayDate + " — " + WORD[ov] + ".",
+      goDashboard: () => this.setState({ view: "dashboard" }),
+      goEntry: () => this.setState({ view: "entry", published: false }),
+      pickTakeA: () => this.setState({ take: "A" }),
+      pickTakeB: () => this.setState({ take: "B" }),
+      tabDashStyle: this.tab(st.view === "dashboard"),
+      tabEntryStyle: this.tab(st.view === "entry"),
+      takeAVariant: st.take === "A" ? "default" : "outline",
+      takeBVariant: st.take === "B" ? "default" : "outline",
+
+      railOpen: st.railOpen !== false,
+      toggleRail: () => this.setState({ railOpen: st.railOpen === false }),
+      railToggleIcon: st.railOpen === false ? "»" : "«",
+      railToggleTitle: st.railOpen === false ? "Show section names" : "Show colors only",
+      railHeadStyle: {
+        display: "flex", alignItems: "center",
+        justifyContent: st.railOpen === false ? "center" : "space-between",
+        gap: "10px", padding: st.railOpen === false ? "0 0 10px" : "0 14px 12px 18px"
+      },
+      dashLayoutStyle: {
+        maxWidth: "1440px", margin: "0 auto", padding: "24px 40px 56px",
+        display: "grid", gap: "28px", alignItems: "start",
+        gridTemplateColumns: (st.railOpen === false ? "60px" : "244px") + " minmax(0, 1fr)"
+      },
+      navItems: [
+        ["sec-1", "I. Directors overall status", ov],
+        ["sec-2", "II. Processing status", ov],
+        ["sec-2a", "II.a. Morning processing", "green"],
+        ["sec-3", "III. Incident management", "yellow"],
+        ["sec-4", "IV. Communication status", this.chosen(COMPONENTS[5])],
+        ["sec-5", "V. Returns processing", "green"],
+        ["sec-maint", "CC. Maintenance schedule", null],
+        ["sec-6", "VI. CIO action items", null],
+        ["sec-7", "VII. Readiness items", null],
+        ["sec-8", "VIII. Production outages", null],
+        ["sec-9", "IX. Test progress", null],
+        ["sec-10", "X. Questions and comments", null]
+      ].map(item => ({
+        href: "#" + item[0], label: item[1],
+        style: this.navLink(st.active === item[0], st.railOpen !== false),
+        dotStyle: item[2]
+          ? { width: st.railOpen === false ? "16px" : "10px", height: st.railOpen === false ? "16px" : "10px", borderRadius: "2px", background: FILL[item[2]], flexShrink: 0, display: "inline-block" }
+          : { width: st.railOpen === false ? "16px" : "10px", height: st.railOpen === false ? "16px" : "10px", borderRadius: "2px", border: "1px solid #c9cdd0", background: "#fff", flexShrink: 0, display: "inline-block", boxSizing: "border-box" }
+      })),
+
+      feeds: FEEDS,
+      overallLabel: WORD[ov],
+      overallDefinition: DEFN[ov],
+      overallSwatch: { width: "56px", height: "56px", borderRadius: "6px", background: FILL[ov], border: "2px solid " + EDGE[ov], flexShrink: 0 },
+      overallSwatchLarge: { width: "96px", height: "96px", borderRadius: "8px", background: FILL[ov], border: "2px solid " + EDGE[ov], flexShrink: 0 },
+      overallNote: overrides.length
+        ? overrides.length + " override" + (overrides.length === 1 ? "" : "s") + " on record today"
+        : "Matches the rule in every section",
+      progressNote: decided + " of " + AREAS.length + " areas confirmed"
+        + (missing.length ? " · " + missing.length + " reason(s) needed" : ""),
+      componentNote: compDecided + " of " + COMPONENTS.length + " components confirmed",
+
+      areaCards: AREAS.map(a => {
+        const c = this.chosen(a);
+        return { name: a.name, detail: a.detail, status: WORD[c], dot: this.dot(c, 14) };
+      }),
+
+      realtime: ["Case management", "Account services", "Records", "Scheduling", "Lookup"].map(n => ({
+        name: n, state: "Available",
+        style: { display: "inline-flex", alignItems: "center", gap: "10px", background: TINT.green, color: INK.green, border: "1px solid " + EDGE.green, borderRadius: "4px", padding: "10px 16px" },
+        dot: this.dot("green", 12)
+      })),
+
+      refundTrend: REFUNDS.map(v => ({ style: { flex: 1, height: v + "px", background: "#005ea2", borderRadius: "1px" } })),
+      latency: LATENCY.map(v => ({ style: { flex: 1, height: v + "px", background: v > 90 ? "#ffbe2e" : "#005ea2" } })),
+      lookback: LOOKBACK.map((c, i) => ({
+        style: {
+          flex: 1, height: "34px", borderRadius: "2px", background: FILL[c],
+          outline: i === LOOKBACK.length - 1 ? "2px solid #1b1b1b" : "none",
+          outlineOffset: i === LOOKBACK.length - 1 ? "2px" : 0
+        }
+      })),
+
+      incidents: INCIDENTS.map(i => ({
+        priority: i.priority, tag: i.tag, ticket: i.ticket, system: i.system,
+        impact: i.impact, age: i.age, owner: i.owner || "—",
+        rowStyle: { borderBottom: "1px solid #dfe1e2", background: i.open ? "#fff" : "#fafafa" }
+      })),
+
+      siteGrid: [
+        { name: "Voice portal (IVR)", dca: ivr.dca.label, dcaStyle: ivr.dca.style, dcaDot: ivr.dca.dot, dcb: ivr.dcb.label, dcbStyle: ivr.dcb.style, dcbDot: ivr.dcb.dot, dcc: ivr.dcc.label, dccStyle: ivr.dcc.style, dccDot: ivr.dcc.dot, comment: "—" },
+        { name: "Contact routing", dca: route.dca.label, dcaStyle: route.dca.style, dcaDot: route.dca.dot, dcb: route.dcb.label, dcbStyle: route.dcb.style, dcbDot: route.dcb.dot, dcc: route.dcc.label, dccStyle: route.dcc.style, dccDot: route.dcc.dot, comment: route.dcc.comment || "—" }
+      ],
+
+      enterpriseRows: COMPONENTS.filter(c => c.enterprise).map(c => {
+        const s = this.chosen(c);
+        return { name: c.name, status: WORD[s], style: this.statusPill(s), dot: this.dot(s, 10) };
+      }),
+
+      ccMetrics: CC_METRICS.map(r => ({
+        metric: r[0], daily: r[1], week: r[2], ytd: r[3], prior: r[4], diff: r[5], diffStyle: this.delta(r[6])
+      })),
+      voiceRows: VOICE.map((r, i) => ({
+        app: r[0], daily: r[1], week: r[2], ytd: r[3], prior: r[4], diff: r[5],
+        diffStyle: this.delta(r[6]),
+        rowStyle: i === VOICE.length - 1
+          ? { background: "#f0f0f0", fontWeight: 700 }
+          : { borderBottom: "1px solid #dfe1e2" }
+      })),
+      discStyle: {
+        background: "transparent", border: "1px solid #dfe1e2", borderRadius: "4px",
+        padding: "8px 14px", fontFamily: "inherit", fontSize: "14px", fontWeight: 700,
+        color: "var(--theme-primary)", cursor: "pointer"
+      },
+      openMetrics: !!st.open.metrics,
+      openVoice: !!st.open.voice,
+      openIntakeDaily: !!st.open.intakeDaily,
+      openIntakeCum: !!st.open.intakeCum,
+      openOps: !!st.open.ops,
+      toggleMetrics: () => this.flip("metrics"),
+      toggleVoice: () => this.flip("voice"),
+      toggleIntakeDaily: () => this.flip("intakeDaily"),
+      toggleIntakeCum: () => this.flip("intakeCum"),
+      toggleOps: () => this.flip("ops"),
+      metricsToggleLabel: st.open.metrics ? "Hide metrics table" : "Show metrics table (6 rows)",
+      voiceToggleLabel: st.open.voice ? "Hide all applications" : "Show all 11 applications",
+      intakeDailyToggleLabel: st.open.intakeDaily ? "Hide daily table" : "Show daily table by center",
+      intakeCumToggleLabel: st.open.intakeCum ? "Hide season-to-date table" : "Show season-to-date table",
+      opsToggleLabel: st.open.ops ? "Hide turnover table" : "Show full turnover table (13 rows)",
+
+      losTrend: LOS.map(v => ({
+        style: {
+          flex: 1, height: Math.round((v - 60) * 5.2) + "px",
+          background: v >= 80 ? "#005ea2" : "#ffbe2e", borderRadius: "1px"
+        }
+      })),
+      channelMix: CHANNELS.map(c => {
+        const total = CHANNELS.reduce((a, x) => a + x[1], 0);
+        const share = (c[1] / total) * 100;
+        return {
+          name: c[0], value: c[1].toLocaleString("en-US"), share: share.toFixed(1) + "%",
+          style: { width: share + "%", background: c[2] },
+          swatch: { width: "12px", height: "12px", borderRadius: "2px", background: c[2], display: "inline-block", flexShrink: 0 }
+        };
+      }),
+      voiceBars: VOICE_TOP.map(r => ({
+        app: r[0], value: r[1], delta: r[3], deltaStyle: this.delta(r[4]),
+        barStyle: { width: r[2] + "%", height: "100%", background: "#005ea2", borderRadius: "2px" }
+      })),
+      intakeBars: INTAKE_BARS.map(r => ({
+        spc: r[0], total: r[1], pct: r[3].toFixed(1) + "%",
+        pctStyle: { fontFamily: "'Roboto Mono', monospace", fontWeight: 700, color: r[3] >= 2.7 ? "#8a7000" : "#3d4551" },
+        barStyle: { width: r[2] + "%", height: "100%", background: "#005ea2", borderRadius: "2px", display: "flex", justifyContent: "flex-end" },
+        errStyle: { width: (r[3] * 6) + "%", height: "100%", background: "#d54309" }
+      })),
+      opsBars: OPS_BARS.map(r => ({
+        name: r[0], submitted: r[1], accepted: r[2], rejected: r[3], rate: r[6], ytdRate: r[7],
+        acceptedStyle: { width: r[4] + "%", background: "#00a91c" },
+        rejectedStyle: { width: r[5] + "%", background: "#d54309" }
+      })),
+
+      showEntitle: st.entitle,
+      toggleEntitle: () => this.setState({ entitle: !st.entitle }),
+      entitleToggleLabel: st.entitle ? "Hide access entitlements" : "Show access entitlements",
+      entitleToggleStyle: {
+        background: "transparent", border: 0, padding: 0, fontFamily: "inherit",
+        fontSize: "15px", fontWeight: 700, color: "var(--theme-primary)",
+        textDecoration: "underline", cursor: "pointer"
+      },
+
+      intakeDaily: INTAKE_DAILY.map((r, i) => ({
+        spc: r[0], total: r[1], good: r[2], error: r[3], pct: r[4],
+        rowStyle: i === INTAKE_DAILY.length - 1 ? { background: "#f0f0f0", fontWeight: 700 } : { borderBottom: "1px solid #dfe1e2" }
+      })),
+      intakeCumulative: INTAKE_CUM.map((r, i) => ({
+        spc: r[0], total: r[1], good: r[2], error: r[3], pct: r[4],
+        rowStyle: i === INTAKE_CUM.length - 1 ? { background: "#f0f0f0", fontWeight: 700 } : { borderBottom: "1px solid #dfe1e2" }
+      })),
+      errorGrid: ERROR_GRID.map(([spc, vals]) => {
+        const cell = v => ({
+          textAlign: "center", fontFamily: "'Roboto Mono', monospace", fontSize: "14px",
+          padding: "10px 0", borderRadius: "2px",
+          background: v >= 3.0 ? "#f4e3db" : v >= 2.7 ? "#faf3d1" : "#ecf3ec",
+          color: v >= 3.0 ? INK.red : v >= 2.7 ? INK.yellow : INK.green
+        });
+        const o = { spc };
+        vals.forEach((v, i) => { o["v" + i] = v.toFixed(1) + "%"; o["c" + i] = cell(v); });
+        return o;
+      }),
+      ops: OPS.map(r => ({
+        label: r[0], daily: r[1], ytd: r[2],
+        rowStyle: r[3] === 1
+          ? { borderBottom: "1px solid #dfe1e2", fontWeight: 700 }
+          : r[3] === 2
+            ? { borderBottom: "1px solid #dfe1e2", background: "#f8f9fa", fontWeight: 700 }
+            : { borderBottom: "1px solid #dfe1e2" }
+      })),
+
+      estRows: EST.map(r => ({
+        project: r[0], goal: r[1], act: r[2], impl: r[3], notes: r[5],
+        status: r[4] === "blue" ? "Complete" : WORD[r[4]],
+        statusStyle: this.statusPill(r[4]), dot: this.dot(r[4], 10)
+      })),
+      outages: OUTAGES,
+      maintPhases: MAINT_PHASES.map((p, i) => ({
+        num: p.num, name: p.name, note: p.note, rows: p.rows,
+        wrapStyle: {
+          padding: "18px 20px",
+          borderLeft: i === 0 ? "1px solid #dfe1e2" : "none",
+          borderTop: "1px solid #dfe1e2", borderRight: "1px solid #dfe1e2", borderBottom: "1px solid #dfe1e2",
+          background: "#fff"
+        }
+      })),
+      centerBars: CENTERS.map(r => ({
+        name: r[0], value: r[1], delta: r[2], deltaStyle: this.delta(r[4]),
+        barStyle: { width: r[3] + "%", height: "100%", background: "#005ea2", borderRadius: "2px" }
+      })),
+
+      rows: this.decisionRows(AREAS),
+      componentRows: this.decisionRows(COMPONENTS),
+
+      railItems: steps.map((s, i) => {
+        const c = s.group ? "green" : this.chosen(s);
+        const touched = s.group ? compDecided > 0 : !!(st.decisions[s.id] && st.decisions[s.id].status);
+        return {
+          name: s.group ? "Contact center components" : s.name,
+          state: s.group ? compDecided + "/" + COMPONENTS.length : (touched ? WORD[c] : "Proposed"),
+          onClick: () => this.setState({ step: i }),
+          style: {
+            display: "flex", alignItems: "center", gap: "10px", width: "100%",
+            fontFamily: "inherit", fontSize: "15px", fontWeight: i === stepIdx ? 700 : 400,
+            padding: "10px 12px", borderRadius: "4px", cursor: "pointer", textAlign: "left",
+            background: i === stepIdx ? "#e8f0f8" : "transparent",
+            border: 0, borderLeft: i === stepIdx ? "4px solid var(--theme-primary)" : "4px solid transparent",
+            color: "var(--theme-ink)"
+          },
+          dotStyle: this.dot(c, 12)
+        };
+      }),
+      stepLabel: "Step " + (stepIdx + 1) + " of " + steps.length,
+      current: {
+        name: cur.name, detail: cur.detail,
+        isGroup: !!cur.group, isSingle: !cur.group,
+        suggestWord: WORD[curSug], suggestWhy: cur.group ? "" : why(cur),
+        chosenWord: WORD[curCho], override: !cur.group && curSug !== curCho, reason: curD.reason || "",
+        calloutStyle: { background: TINT[curSug], border: "1px solid " + EDGE[curSug], borderLeft: "6px solid " + EDGE[curSug], borderRadius: "4px", padding: "20px 24px" },
+        calloutSwatch: { width: "44px", height: "44px", borderRadius: "4px", background: FILL[curSug], border: "2px solid " + EDGE[curSug], flexShrink: 0 },
+        onReason: e => this.reason(cur.id, e.target.value),
+        bigChips: ["green", "yellow", "red"].map(c => ({
+          label: WORD[c], hint: HINT[c],
+          swatch: { width: "28px", height: "28px", borderRadius: "4px", background: FILL[c], border: "2px solid " + EDGE[c], display: "inline-block" },
+          style: this.bigChip(c, curCho === c),
+          onClick: () => this.set(cur.id, c)
+        }))
+      },
+      nextLabel: last ? "Publish agenda" : "Confirm and continue",
+      nextStep: () => {
+        if (!cur.group && (!st.decisions[cur.id] || !st.decisions[cur.id].status)) this.set(cur.id, curCho);
+        if (last) this.setState({ published: missing.length === 0 });
+        else this.setState({ step: stepIdx + 1 });
+      },
+      prevStep: () => this.setState({ step: Math.max(0, stepIdx - 1) }),
+      publish: () => this.setState({ published: missing.length === 0 })
+    };
+  }
+}
+</script>
+</body>
+</html>

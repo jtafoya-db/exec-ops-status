@@ -1,0 +1,8 @@
+Copyright (2026) Databricks, Inc.
+
+This Software includes software developed at Databricks (https://www.databricks.com/) and its use is subject to the included LICENSE file.
+
+This Software also bundles third-party components (fonts, design-system assets, and the
+prebuilt frontend's dependencies) in the optional Databricks App under
+optional/exec-ops-status/. Those components remain subject to their own licenses, which are
+listed with their attribution notices in optional/exec-ops-status/THIRD_PARTY_NOTICES.md.

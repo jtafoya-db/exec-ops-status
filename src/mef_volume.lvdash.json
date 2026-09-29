@@ -1,0 +1,855 @@
+{
+  "datasets": [
+    {
+      "name": "mef_total",
+      "displayName": "mef_total",
+      "queryLines": [
+        "SELECT daily_value AS total_submitted_daily, ytd_value AS total_submitted_ytd FROM mef_mvp_gold_volume WHERE masterfile = 'TOTAL' AND measure = 'total_submitted'\n"
+      ]
+    },
+    {
+      "name": "mef_imf_accepted",
+      "displayName": "mef_imf_accepted",
+      "queryLines": [
+        "SELECT daily_value AS imf_accepted_daily FROM mef_mvp_gold_disposition WHERE masterfile = 'IMF' AND disposition = 'Accepted'\n"
+      ]
+    },
+    {
+      "name": "mef_bmf_accepted",
+      "displayName": "mef_bmf_accepted",
+      "queryLines": [
+        "SELECT daily_value AS bmf_accepted_daily FROM mef_mvp_gold_disposition WHERE masterfile = 'BMF' AND disposition = 'Accepted'\n"
+      ]
+    },
+    {
+      "name": "mef_federal",
+      "displayName": "mef_federal",
+      "queryLines": [
+        "SELECT SUM(ytd_value) AS federal_ytd FROM mef_mvp_gold_composition WHERE segment = 'Federal'\n"
+      ]
+    },
+    {
+      "name": "mef_states",
+      "displayName": "mef_states",
+      "queryLines": [
+        "SELECT SUM(ytd_value) AS states_ytd FROM mef_mvp_gold_composition WHERE segment = 'State'\n"
+      ]
+    },
+    {
+      "name": "mef_reject_rates",
+      "displayName": "mef_reject_rates",
+      "queryLines": [
+        "SELECT masterfile, 'Today' AS period, daily_rate AS reject_rate_pct FROM mef_mvp_gold_volume WHERE measure = 'reject_rate' UNION ALL SELECT masterfile, 'YTD' AS period, ytd_rate AS reject_rate_pct FROM mef_mvp_gold_volume WHERE measure = 'reject_rate'\n"
+      ]
+    },
+    {
+      "name": "mef_volume",
+      "displayName": "mef_volume",
+      "queryLines": [
+        "SELECT description, daily_display, ytd_display, display_order FROM mef_mvp_gold_volume ORDER BY display_order\n"
+      ]
+    },
+    {
+      "name": "mef_composition",
+      "displayName": "mef_composition",
+      "queryLines": [
+        "SELECT segment, component, daily_value, ytd_value FROM mef_mvp_gold_composition\n"
+      ]
+    },
+    {
+      "name": "mef_disposition",
+      "displayName": "mef_disposition",
+      "queryLines": [
+        "SELECT masterfile, disposition, daily_value, ytd_value FROM mef_mvp_gold_disposition\n"
+      ]
+    },
+    {
+      "name": "mef_as_of",
+      "displayName": "mef_as_of",
+      "queryLines": [
+        "SELECT date_format(as_of_date, 'MM/dd/yyyy') AS as_of_display FROM mef_mvp_gold_as_of\n"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "mef_volume",
+      "displayName": "MEF Volume",
+      "layout": [
+        {
+          "widget": {
+            "name": "hdr",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# MEF Volume \u2014 Modernized e-File\n",
+                "**Daily snapshot (as-of date at right) + season Year-to-Date.** Federal (IMF + BMF) and State e-file submission volumes, acceptance, and reject rates.\n",
+                "\n",
+                "*Phase 1 snapshot on seed data \u2014 reconciles 1:1 to the source MEF VOLUME DATA report. Trend / YoY unlock automatically once a real daily feed lands.*"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 9,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "as_of",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "mef_as_of",
+                  "fields": [
+                    {
+                      "name": "as_of_display",
+                      "expression": "`as_of_display`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "As-of business date"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "as_of_display",
+                  "displayName": "As of"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_sub_d",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "mef_total",
+                  "fields": [
+                    {
+                      "name": "total_submitted_daily",
+                      "expression": "`total_submitted_daily`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Total Submitted (Daily)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "total_submitted_daily",
+                  "displayName": "Fed + State",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 1
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_sub_y",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "mef_total",
+                  "fields": [
+                    {
+                      "name": "total_submitted_ytd",
+                      "expression": "`total_submitted_ytd`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Total Submitted (YTD)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "total_submitted_ytd",
+                  "displayName": "Fed + State",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 1
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 2,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_imf_a",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "mef_imf_accepted",
+                  "fields": [
+                    {
+                      "name": "imf_accepted_daily",
+                      "expression": "`imf_accepted_daily`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "IMF Accepted (Daily)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "imf_accepted_daily",
+                  "displayName": "IMF Accepted",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 1
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_bmf_a",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "mef_bmf_accepted",
+                  "fields": [
+                    {
+                      "name": "bmf_accepted_daily",
+                      "expression": "`bmf_accepted_daily`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "BMF Accepted (Daily)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "bmf_accepted_daily",
+                  "displayName": "BMF Accepted",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 1
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_imf_r",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "mef_federal",
+                  "fields": [
+                    {
+                      "name": "federal_ytd",
+                      "expression": "`federal_ytd`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Federal Volume (YTD)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "federal_ytd",
+                  "displayName": "IMF + BMF",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 1
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 2,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_bmf_r",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "mef_states",
+                  "fields": [
+                    {
+                      "name": "states_ytd",
+                      "expression": "`states_ytd`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "State Volume (YTD)"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "states_ytd",
+                  "displayName": "States",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 1
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 10,
+            "y": 2,
+            "width": 2,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "comp_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "mef_composition",
+                  "fields": [
+                    {
+                      "name": "segment",
+                      "expression": "`segment`"
+                    },
+                    {
+                      "name": "daily_value",
+                      "expression": "`daily_value`"
+                    },
+                    {
+                      "name": "component",
+                      "expression": "`component`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Volume Composition \u2014 Federal (IMF/BMF) vs State (Daily)"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "segment",
+                  "displayName": "Segment",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "daily_value",
+                  "displayName": "Submissions (Daily)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "component",
+                  "displayName": "Component",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 12,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "disp_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "mef_disposition",
+                  "fields": [
+                    {
+                      "name": "masterfile",
+                      "expression": "`masterfile`"
+                    },
+                    {
+                      "name": "daily_value",
+                      "expression": "`daily_value`"
+                    },
+                    {
+                      "name": "disposition",
+                      "expression": "`disposition`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Accepted vs Rejected per Masterfile (Daily)"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "masterfile",
+                  "displayName": "Masterfile",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "daily_value",
+                  "displayName": "Submissions (Daily)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "disposition",
+                  "displayName": "Disposition",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "reject_rate_compare",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "mef_reject_rates",
+                  "fields": [
+                    {
+                      "name": "masterfile",
+                      "expression": "`masterfile`"
+                    },
+                    {
+                      "name": "reject_rate_pct",
+                      "expression": "`reject_rate_pct`"
+                    },
+                    {
+                      "name": "period",
+                      "expression": "`period`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Reject Rate \u2014 Today vs YTD"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "masterfile",
+                  "displayName": "Masterfile",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "reject_rate_pct",
+                  "displayName": "Reject Rate (%)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "period",
+                  "displayName": "Period",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 5,
+            "width": 6,
+            "height": 5
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "detail",
+      "displayName": "Turnover detail",
+      "layout": [
+        {
+          "widget": {
+            "name": "src_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "mef_volume",
+                  "fields": [
+                    {
+                      "name": "description",
+                      "expression": "`description`"
+                    },
+                    {
+                      "name": "daily_display",
+                      "expression": "`daily_display`"
+                    },
+                    {
+                      "name": "ytd_display",
+                      "expression": "`ytd_display`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Source Detail \u2014 reconciles 1:1 to the source MEF VOLUME DATA report"
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "description",
+                    "headerAlignment": "left",
+                    "displayName": "Description"
+                  },
+                  {
+                    "fieldName": "daily_display",
+                    "headerAlignment": "right",
+                    "displayName": "Daily"
+                  },
+                  {
+                    "fieldName": "ytd_display",
+                    "headerAlignment": "right",
+                    "displayName": "YTD"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 8
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#F0F0F0",
+        "dark": "#141414"
+      },
+      "widgetBackgroundColor": {
+        "light": "#FFFFFF",
+        "dark": "#1B1B1B"
+      },
+      "widgetBorderColor": {
+        "light": "#C9C9C9",
+        "dark": "#3D3D3D"
+      },
+      "selectionColor": {
+        "light": "#005EA2",
+        "dark": "#73B3E7"
+      },
+      "visualizationColors": [
+        "#005EA2",
+        "#1A4480",
+        "#00A91C",
+        "#FFBE2E",
+        "#D83933",
+        "#54278F",
+        "#008480",
+        "#5C5C5C"
+      ],
+      "widgetHeaderAlignment": "LEFT",
+      "widgetPadding": 16,
+      "widgetMargin": 8,
+      "widgetCornerRadius": 4,
+      "widgetShadow": 5,
+      "fontSettings": {
+        "base": {
+          "fontFamily": "Inter",
+          "fontColor": {
+            "light": "#1F272D",
+            "dark": "#E8EAED"
+          },
+          "fontSize": 12
+        },
+        "widgetTitle": {
+          "fontFamily": "Inter",
+          "fontColor": {
+            "light": "#1A4480",
+            "dark": "#EAF3FA"
+          },
+          "fontSize": 14,
+          "fontWeight": 700
+        },
+        "widgetDescription": {
+          "fontFamily": "Inter",
+          "fontColor": {
+            "light": "#5F6B7A",
+            "dark": "#B0B8C1"
+          },
+          "fontSize": 12
+        },
+        "fieldTitle": {
+          "fontFamily": "Inter",
+          "fontWeight": 500
+        },
+        "fieldValue": {
+          "fontFamily": "Inter"
+        }
+      },
+      "gridLineColor": {
+        "light": "#EDEFF2",
+        "dark": "#2A3138"
+      },
+      "axisLineColor": {
+        "light": "#C7CDD4",
+        "dark": "#3A4148"
+      },
+      "visualizationColorMappings": [
+        {
+          "value": "Green",
+          "color": "#00A91C"
+        },
+        {
+          "value": "Yellow",
+          "color": "#FFBE2E"
+        },
+        {
+          "value": "Red",
+          "color": "#D83933"
+        },
+        {
+          "value": "P1",
+          "color": "#D83933"
+        },
+        {
+          "value": "P2",
+          "color": "#FFBE2E"
+        },
+        {
+          "value": "IMF",
+          "color": "#005EA2"
+        },
+        {
+          "value": "BMF",
+          "color": "#1A4480"
+        },
+        {
+          "value": "States",
+          "color": "#008480"
+        },
+        {
+          "value": "Federal",
+          "color": "#005EA2"
+        },
+        {
+          "value": "State",
+          "color": "#008480"
+        },
+        {
+          "value": "Accepted",
+          "color": "#00A91C"
+        },
+        {
+          "value": "Rejected",
+          "color": "#D83933"
+        }
+      ]
+    }
+  }
+}

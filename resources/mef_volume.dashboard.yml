@@ -1,0 +1,28 @@
+# The standalone MEF Volume dashboard (Phase 1).
+#
+# Reads the mef_mvp_gold_* views built by resources/mef_volume.job.yml. It is a
+# STANDALONE resource: it does NOT depend on any other gold-layer marts.
+#
+# RETARGET BY VARS ONLY (no hardcoded catalog/schema). The datasets in
+# src/mef_volume.lvdash.json use UNQUALIFIED table names and carry NO per-dataset
+# catalog/schema. dataset_catalog/dataset_schema below (bound to
+# ${var.catalog}/${var.schema}) supply them at deploy time; per the DABs schema
+# these "override the catalog/schema specified in individual dataset definitions",
+# so on any target the dashboard resolves against that target's vars — the SAME
+# ${var.catalog}/${var.schema} the build_mef_volume_medallion job uses to create
+# the mef_mvp_gold_* views. One source of truth per target; no silent mismatch.
+#
+# scripts/set_dashboard_catalog_schema.py remains an OPTIONAL belt-and-suspenders
+# to also stamp catalog/schema onto the on-disk datasets (e.g. to open the raw
+# .lvdash.json outside the bundle); it is NOT required for a correct deploy.
+
+resources:
+  dashboards:
+    mef_volume:
+      display_name: "MEF Volume — Modernized e-File"
+      file_path: ../src/mef_volume.lvdash.json
+      warehouse_id: ${var.warehouse_id}
+      # OVERRIDE each dataset's catalog/schema at deploy (per the DABs schema),
+      # making retarget automatic and impossible to silently mismatch.
+      dataset_catalog: ${var.catalog}
+      dataset_schema: ${var.schema}
